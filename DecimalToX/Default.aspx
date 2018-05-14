@@ -115,6 +115,12 @@
             </asp:DropDownList>
             <br />
             <br />
+            To how many digits do you want your answer to be accurate?
+            <br />
+            NOTE: the higher this number, the longer the conversion will take.<br />
+            <asp:TextBox ID="digitsPrecisionTextBox" runat="server"></asp:TextBox>
+            <br />
+            <br />
             
             <asp:Button ID="convertButton" runat="server" Text="Convert" OnClick="convertButton_Click" />
             <br />

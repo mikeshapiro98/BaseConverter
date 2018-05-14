@@ -47,14 +47,13 @@ namespace DecimalToX
                 // if user input is a fractional number < 0
                 else if (inputArray[0] == '.')
                 {
-                    inputArray = inputArray.Skip(1).ToArray();
-                    input = input.TrimStart('.');
-                    var intInput = Convert.ToInt64(input);
-                    if (intInput < 0)
+                    double fractionInput = Convert.ToDouble(input);
+                    if (fractionInput < 0)
                     {
-                        intInput = intInput * -1;
+                        fractionInput = fractionInput * -1;
                     }
-                    CalculateFractionalValue(targetBase, intInput, targetNumeralSystem);
+                    resultLabel.Text += ".";
+                    CalculateFractionalValue(targetBase, fractionInput, targetNumeralSystem);
                 }
                 // if user input is a fractional number > 0
                 else
@@ -69,9 +68,8 @@ namespace DecimalToX
                     }
 
                     char[] fractionArray = inputArray.SkipWhile(x => x != '.').ToArray();
-                    fractionArray = fractionArray.Skip(1).ToArray();
                     string fractionString = new string(fractionArray);
-                    long fractionInput = Convert.ToInt64(fractionString);
+                    double fractionInput = Convert.ToDouble(fractionString);
                     if (fractionInput < 0)
                     {
                         fractionInput = fractionInput * -1;
@@ -88,7 +86,7 @@ namespace DecimalToX
             }
         }
 
-        private void CalculateFractionalValue(int targetBase, long fractionInput, List<char> targetNumeralSystem)
+        private void CalculateFractionalValue(int targetBase, double fractionInput, List<char> targetNumeralSystem)
         {
             // edge case: if targetBase is unary
             if (targetBase == 1)
@@ -97,41 +95,47 @@ namespace DecimalToX
             }
             else
             {
-                resultLabel.Text += "Support for fractional numbers coming soon!";
-            }
-            /*
-            // decrement placeCounter until you reach a placeValue < intInput
-            var placeCounter = -1;
-            long placeValue = Convert.ToInt64(CalculatePlaceValue(targetBase, placeCounter));
-            while (fractionInput <= placeValue)
-            {
-                placeCounter--;
-                placeValue = Convert.ToInt64(CalculatePlaceValue(targetBase, placeCounter));
-            }
-            // increment placeCounter and recalculate placeValue
-            placeCounter++;
-            placeValue = Convert.ToInt64(CalculatePlaceValue(targetBase, placeCounter));
-            while (placeCounter <= -1)
-            {
-                if (intInput < placeValue)
+                double doubleBase = Convert.ToDouble(targetBase);
+                int loopCounter = 0;
+                int digitsPrecision;
+                bool precise = Int32.TryParse(digitsPrecisionTextBox.Text, out digitsPrecision);
+
+                if (!precise)
                 {
-                    // calculate dividend, concatenate dividend to resultLabel
-                    long dividend = intInput / placeValue;
-                    // concatenate dividend in target numeralSystem to resultLabel
-                    char digitCharacter = DetermineDigitCharacter(dividend, targetNumeralSystem);
-                    resultLabel.Text += digitCharacter.ToString();
-                    // subtract placeValue from intInput
-                    intInput -= (placeValue * dividend);
+                    resultLabel.Text = "<span style='color:#B33A3A;'>Please enter a valid integer in the digits field.</span>";
+                    return;
+                }
+                else if (digitsPrecision < 0)
+                {
+                    resultLabel.Text = "<span style='color:#B33A3A;'>Please enter a positive integer in the digits field.</span>";
+                    return;
                 }
                 else
                 {
-                    resultLabel.Text += '0';
+                    // initialize while loop and counter
+                    while (fractionInput > 0 && loopCounter < digitsPrecision)
+                    {
+                        double appendageCarry = fractionInput * targetBase;
+                        int appendage = Convert.ToInt32(Math.Floor(appendageCarry));
+                        char appendageChar;
+                        if (appendage == 1)
+                        {
+                            appendageChar = '1';
+                        }
+                        else if (appendage == 0)
+                        {
+                            appendageChar = '0';
+                        }
+                        else
+                        {
+                            appendageChar = targetNumeralSystem.ElementAt(appendage);
+                        }
+                        resultLabel.Text += appendageChar;
+                        fractionInput = appendageCarry - appendage;
+                        loopCounter++;
+                    }
                 }
-                // increment placeCounter and recalculate placeValue
-                placeCounter++;
-                placeValue = Convert.ToInt64(CalculatePlaceValue(targetBase, placeCounter));
             }
-            */
         }
 
         private void CalculateIntegerValue(int targetBase, long intInput, List<char> targetNumeralSystem)

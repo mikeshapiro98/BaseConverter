@@ -19,7 +19,7 @@ namespace BaseConverter
             List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•',' ' };
 
             // use user selection to create chosenNumeralSystem array
-            int chosenBase = Convert.ToInt32(baseDropDownList.SelectedValue);
+            int chosenBase = Convert.ToInt32(originBaseDropDownList.SelectedValue);
             List<char> chosenNumeralSystem = masterNumeralSystem.Take(chosenBase).ToList();
 
             // validate user input
@@ -33,7 +33,7 @@ namespace BaseConverter
                     resultLabel.Text = "-";
                     inputArray = inputArray.Skip(1).ToArray();
                 }
-                // if user input is a non-zero integer
+                // if user input is an integer
                 if (inputArray[inputArray.Length -1] == '.' || !inputArray.Contains('.'))
                 {
                     resultLabel.Text += CalculateValueOfPositiveExponentArray(inputArray, chosenBase, masterNumeralSystem).ToString();
@@ -122,21 +122,21 @@ namespace BaseConverter
             var periodCounter = 0;
             foreach (var digit in inputArray)
             {
-                // ensure all chars in inputArray exist in chosenNumeralSystem
-                if (!chosenNumeralSystem.Contains(digit) && digit != '-' && digit != '.')
-                {
-                    resultLabel.Text = String.Format("<span style='color:#B33A3A;'>Would you please only enter characters that exist in the {0} number system?</span>",
-                        baseDropDownList.SelectedItem.Text);
-                    return false;
-                }
                 // track quantity of minuses and periods in inputArray
                 if (digit == '-')
                 {
                     minusCounter += 1;
                 }
-                if (digit == '.')
+                else if (digit == '.')
                 {
                     periodCounter += 1;
+                }
+                // ensure all chars in inputArray exist in chosenNumeralSystem
+                else if (!chosenNumeralSystem.Contains(digit))
+                {
+                    resultLabel.Text = String.Format("<span style='color:#B33A3A;'>Would you please only enter characters that exist in the {0} number system?</span>",
+                        originBaseDropDownList.SelectedItem.Text);
+                    return false;
                 }
             }
             // throw exceptions if there are multiple minuses or periods

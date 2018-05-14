@@ -1,18 +1,21 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="BaseConverter.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="DecimalToX.Default" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Base X to Decimal</title>
+    <title>Decimal to Base X</title>
 </head>
 <body>
     <form id="form1" runat="server">
         <div>
-
-            Select a numeral system:
+            Input a decimal number:<br />
+            <asp:TextBox ID="inputTextBox" runat="server"></asp:TextBox>
             <br />
-            <asp:DropDownList ID="originBaseDropDownList" runat="server">
+            <br />
+             Select a numeral system to convert to:
+            <br />
+            <asp:DropDownList ID="targetBaseDropDownList" runat="server">
                 <asp:ListItem Selected="True" Value="1" Text="Base 1 (Unary)"></asp:ListItem>
                 <asp:ListItem Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
@@ -112,11 +115,8 @@
             </asp:DropDownList>
             <br />
             <br />
-            Input a number in your chosen numeral system:<br />
-            <asp:TextBox ID="inputTextBox" runat="server"></asp:TextBox>
-            <br />
-            <br />
-            <asp:Button ID="convertButton" runat="server" Text="Convert to Decimal" OnClick="convertButton_Click" />
+            
+            <asp:Button ID="convertButton" runat="server" Text="Convert" OnClick="convertButton_Click" />
             <br />
             <br />
             <asp:Label ID="resultLabel" runat="server"></asp:Label>

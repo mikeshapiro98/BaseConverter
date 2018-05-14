@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BaseConverter {
+namespace DecimalToX {
     
     
     public partial class Default {
@@ -22,15 +22,6 @@ namespace BaseConverter {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// originBaseDropDownList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList originBaseDropDownList;
-        
-        /// <summary>
         /// inputTextBox control.
         /// </summary>
         /// <remarks>
@@ -38,6 +29,15 @@ namespace BaseConverter {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox inputTextBox;
+        
+        /// <summary>
+        /// targetBaseDropDownList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList targetBaseDropDownList;
         
         /// <summary>
         /// convertButton control.

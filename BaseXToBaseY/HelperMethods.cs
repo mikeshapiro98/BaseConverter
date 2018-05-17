@@ -314,28 +314,23 @@ namespace BaseXToBaseY
         public static string FormatResultForDisplay(string input, char[] inputArray, string result, int originBase, int targetBase, string originalInput, int places)
         {
             // final validation
-            double convertedNumber;
             char[] check1Array = inputArray.SkipWhile(x => x != '.').ToArray();
             check1Array = check1Array.Skip(1).ToArray();
             char[] check2Array = check1Array.SkipWhile(x => x == '0').ToArray();
             if (input == "0")
             {
-                convertedNumber = 0;
+                result = "0";
             }
             else if (originalInput.Contains('.') && check2Array.Length == 0)
             {
                 input = "0";
-                convertedNumber = 0;
-            }
-            else
-            {
-                convertedNumber = Convert.ToDouble(result);
+                result = "0";
             }
             //handle negatives
             if (originalInput[0] == '-' && input != "0")
             {
                 input = input.Insert(0, "-");
-                convertedNumber = convertedNumber * -1;
+                result = result.Insert(0, "-");
             }
 
             if (input.Contains('.'))
@@ -343,18 +338,11 @@ namespace BaseXToBaseY
                 input = input.TrimEnd('0');
             }
 
-            string digitsPrecision = ".";
-            for (int i = 0; i < places; i++)
-            {
-                digitsPrecision += "#";
-            }
-            string convertString = convertedNumber.ToString(digitsPrecision);
-
             // format results for display
             result = String.Format("{0}<sub>{1}</sub> = {2}<sub>{3}</sub>",
                 input,
                 originBase,
-                convertString,
+                result,
                 targetBase);
 
             return result;

@@ -13,7 +13,7 @@
             <asp:Button ID="calculatorPageButton" PostBackUrl="~/Calculator.aspx" runat="server" Text="Calculator" /><br /><br />
             Select the numeral system from which you wish to convert:<br />
             <asp:DropDownList ID="originDropDownList" runat="server">
-                <asp:ListItem Selected="True" Value="1" Text="Base 1 (Unary)"></asp:ListItem>
+                <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
                 <asp:ListItem Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
                 <asp:ListItem Value="4" Text="Base 4 (Quaternary)"></asp:ListItem>
@@ -22,7 +22,7 @@
                 <asp:ListItem Value="7" Text="Base 7 (Septenary)"></asp:ListItem>
                 <asp:ListItem Value="8" Text="Base 8 (Octal)"></asp:ListItem>
                 <asp:ListItem Value="9" Text="Base 9 (Nonary)"></asp:ListItem>
-                <asp:ListItem Value="10" Text="Base 10 (Decimal)"></asp:ListItem>
+                <asp:ListItem Selected="True" Value="10" Text="Base 10 (Decimal)"></asp:ListItem>
                 <asp:ListItem Value="11" Text="Base 11 (Undecimal)"></asp:ListItem>
                 <asp:ListItem Value="12" Text="Base 12 (Duodecimal)"></asp:ListItem>
                 <asp:ListItem Value="13" Text="Base 13 (Tridecimal)"></asp:ListItem>
@@ -123,8 +123,8 @@
             <br />
             Select the numeral system to which you wish to convert:<br />
             <asp:DropDownList ID="targetDropDownList" runat="server">
-                <asp:ListItem Selected="True" Value="1" Text="Base 1 (Unary)"></asp:ListItem>
-                <asp:ListItem Value="2" Text="Base 2 (Binary)"></asp:ListItem>
+                <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
+                <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
                 <asp:ListItem Value="4" Text="Base 4 (Quaternary)"></asp:ListItem>
                 <asp:ListItem Value="5" Text="Base 5 (Quinary)"></asp:ListItem>

@@ -42,15 +42,16 @@ namespace BaseXToBaseY
                 char[] inputArray = input.ToCharArray();
 
                 // validate user input
-                if (HelperMethods.ValidateInput(originNumeralSystem, inputArray, resultLabel.Text, originNumeralSystemName, targetBase))
+                if (HelperMethods.ValidateInput(originNumeralSystem, inputArray, resultLabel.Text, originNumeralSystemName, originBase, targetBase, input, placesTextBox.Text))
                 {
+                    var places = Convert.ToInt32(placesTextBox.Text);
                     // convert user input to decimal
-                    double decimalInput = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem, resultLabel.Text);
+                    double decimalInput = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem, resultLabel.Text, places);
                     resultLabel.Text = decimalInput.ToString();
                     // convert user input from decimal to target base
-                    string targetOutput = HelperMethods.ConvertDecimalToTarget(resultLabel.Text, decimalInput, masterNumeralSystem, targetNumeralSystem, targetBase, placesTextBox.Text);
+                    string targetOutput = HelperMethods.ConvertDecimalToTarget(resultLabel.Text, decimalInput, masterNumeralSystem, targetNumeralSystem, targetBase, places);
                     // display result
-                    resultLabel.Text = HelperMethods.FormatResultForDisplay(input, inputArray, targetOutput, originBase, targetBase, inputTextBox.Text);
+                    resultLabel.Text = HelperMethods.FormatResultForDisplay(input, inputArray, targetOutput, originBase, targetBase, inputTextBox.Text, placesTextBox.Text);
                 }
             }
             // exception handling
@@ -81,6 +82,10 @@ namespace BaseXToBaseY
             catch (NoDogsOnTheMoonException)
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>There is no 0 in the Base 1 (Unary) system.</span>";
+            }
+            catch (FormatZeroException ex)
+            {
+                resultLabel.Text = "0<sub>" + ex.OriginBase + "</sub> = 0<sub>" + ex.TargetBase + "</sub>";
             }
         }
     }

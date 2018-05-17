@@ -259,3 +259,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/BaseXToBaseY/Calculator.aspx.designer.cs
+/BaseXToBaseY/Calculator.aspx.cs
+/BaseXToBaseY/Calculator.aspx

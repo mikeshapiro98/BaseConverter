@@ -9,6 +9,8 @@
 <body>
     <form id="form1" runat="server">
         <div>
+            <asp:Button Enabled="false" ID="converterPageButton" PostBackUrl="~/Default.aspx" runat="server" Text="Converter" />
+            <asp:Button ID="calculatorPageButton" PostBackUrl="~/Calculator.aspx" runat="server" Text="Calculator" /><br /><br />
             Select the numeral system from which you wish to convert:<br />
             <asp:DropDownList ID="originDropDownList" runat="server">
                 <asp:ListItem Selected="True" Value="1" Text="Base 1 (Unary)"></asp:ListItem>

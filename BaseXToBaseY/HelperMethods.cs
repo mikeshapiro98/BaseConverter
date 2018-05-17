@@ -123,12 +123,8 @@ namespace BaseXToBaseY
                 decimalValue += (digitValue * Convert.ToDouble(CalculatePlaceValue(originBase, placeCounter, places)));
                 placeCounter++;
             }
-            string notation = ".";
-            for (int i = 0; i < places; i++)
-            {
-                notation += "#";
-            }
-            string decimalInput = decimalValue.ToString(notation);
+            // prevent C# from implementing scientific notation when it converts a double to a string
+            string decimalInput = decimalValue.ToString(Formatter.Notation);
             return decimalInput;
         }
 
@@ -162,12 +158,8 @@ namespace BaseXToBaseY
             double doublePlace = Convert.ToDouble(placeCounter);
             // calculate placeValue and convert it to a long for return
             double doublePlaceValue = Math.Pow(doubleBase, doublePlace);
-            string notation = ".";
-            for (int i = 0; i < places; i++)
-            {
-                notation += "#";
-            }
-            string stringPlaceValue = doublePlaceValue.ToString(notation);
+            // prevent C# from implementing scientific notation when it converts a double to a string
+            string stringPlaceValue = doublePlaceValue.ToString(Formatter.Notation);
             return stringPlaceValue;
         }
 
@@ -351,12 +343,12 @@ namespace BaseXToBaseY
                 input = input.TrimEnd('0');
             }
 
-            string notation = ".";
+            string digitsPrecision = ".";
             for (int i = 0; i < places; i++)
             {
-                notation += "#";
+                digitsPrecision += "#";
             }
-            string convertString = convertedNumber.ToString(notation);
+            string convertString = convertedNumber.ToString(digitsPrecision);
 
             // format results for display
             result = String.Format("{0}<sub>{1}</sub> = {2}<sub>{3}</sub>",

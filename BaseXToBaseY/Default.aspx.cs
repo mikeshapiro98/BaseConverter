@@ -10,7 +10,7 @@ namespace BaseXToBaseY
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void convertButton_Click(object sender, EventArgs e)
@@ -51,7 +51,7 @@ namespace BaseXToBaseY
                     // convert user input from decimal to target base
                     string targetOutput = HelperMethods.ConvertDecimalToTarget(resultLabel.Text, decimalInput, masterNumeralSystem, targetNumeralSystem, targetBase, places);
                     // display result
-                    resultLabel.Text = HelperMethods.FormatResultForDisplay(input, inputArray, targetOutput, originBase, targetBase, inputTextBox.Text, placesTextBox.Text);
+                    resultLabel.Text = HelperMethods.FormatResultForDisplay(input, inputArray, targetOutput, originBase, targetBase, inputTextBox.Text, places);
                 }
             }
             // exception handling

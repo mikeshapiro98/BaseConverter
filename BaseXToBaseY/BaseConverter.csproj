@@ -89,6 +89,7 @@
     <Compile Include="Exceptions\TooManyMinusesException.cs" />
     <Compile Include="Exceptions\TooManyPeriodsException.cs" />
     <Compile Include="Exceptions\UnaryFractionException.cs" />
+    <Compile Include="Formatter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -2,11 +2,11 @@
 
 namespace BaseXToBaseY.Exceptions
 {
-    public class TargetNumeralSystemLacksCharacterException : Exception
+    public class OriginNumeralSystemLacksCharacterException : Exception
     {
         public string NumeralSystemName { get; set; }
 
-        public TargetNumeralSystemLacksCharacterException(string numeralSystemName)
+        public OriginNumeralSystemLacksCharacterException(string numeralSystemName)
         {
             NumeralSystemName = numeralSystemName;
         }

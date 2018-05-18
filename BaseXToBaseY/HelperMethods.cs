@@ -9,7 +9,7 @@ namespace BaseXToBaseY
     {
 
         // prevent faulty user input
-        public static bool ValidateInput(List<char> originNumeralSystem, char[] inputArray, string result, string originNumeralSystemName, int originBase, int targetBase, string input, string placesText)
+        public static bool ValidateInput(List<char> originNumeralSystem, char[] inputArray, string result, string originNumeralSystemName, int originBase, int targetBase, string input, string placesText, string originalInput)
         {
             // initialize minus and period counters
             var minusCounter = 0;
@@ -28,7 +28,7 @@ namespace BaseXToBaseY
                 // ensure every char in inputArray exists in originNumeralSystem
                 else if (!originNumeralSystem.Contains(digit))
                 {
-                    throw new TargetNumeralSystemLacksCharacterException(originNumeralSystemName);
+                    throw new OriginNumeralSystemLacksCharacterException(originNumeralSystemName);
                 }
             }
             // throw exceptions if there are multiple minuses or periods
@@ -45,8 +45,8 @@ namespace BaseXToBaseY
             {
                 throw new MisplacedMinusException();
             }
-            // throw exception for 0 in unary
-            if (inputArray.Length == 1 && inputArray[0] == '0' && targetBase == 1)
+            // throw exceptions in unary
+            if ((inputArray.Length == 1 && inputArray[0] == '0' && targetBase == 1) || originalInput.Contains('0') || originalInput.Contains('.'))
             {
                 throw new NoDogsOnTheMoonException();
             }
@@ -256,7 +256,7 @@ namespace BaseXToBaseY
             // edge case: if targetBase is unary
             if (targetBase == 1)
             {
-                throw new UnaryFractionException();
+                throw new NoDogsOnTheMoonException();
             }
             else
             {
@@ -345,6 +345,42 @@ namespace BaseXToBaseY
                 result,
                 targetBase);
 
+            return result;
+        }
+
+        // add, subtract, multiply, or divide
+        internal static double Calculate(double decimalNum1, double decimalNum2, int operation)
+        {
+            double decimalTarget;
+            switch (operation)
+            {
+                case '+':
+                    decimalTarget = decimalNum1 + decimalNum2;
+                    break;
+                case '-':
+                    decimalTarget = decimalNum1 - decimalNum2;
+                    break;
+                case '*':
+                    decimalTarget = decimalNum1 * decimalNum2;
+                    break;
+                default:
+                    decimalTarget = decimalNum1 / decimalNum2;
+                    break;
+            }
+            return decimalTarget;
+        }
+
+        // display calculation
+        internal static string FormatCalculationForDisplay(string num1, int num1Base, char operation, string num2, int num2Base, string targetOutput, int targetBase)
+        {
+            string result = String.Format("{0}<sub>{1}</sub> {2} {3}<sub>{4}</sub> = {5}<sub>{6}</sub>",
+                num1,
+                num1Base,
+                operation,
+                num2,
+                num2Base,
+                targetOutput,
+                targetBase);
             return result;
         }
     }

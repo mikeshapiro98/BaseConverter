@@ -17,43 +17,54 @@ namespace BaseXToBaseY
         {
             try
             {
-                resultLabel.Text = "";
-
-                // initialize masterNumeralSystem list and create originNumeralSystem and targetNumeralSystem lists from user selection
-                List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
-                
-                int originBase = Convert.ToInt32(originDropDownList.SelectedValue);
-                List<char> originNumeralSystem = masterNumeralSystem.Take(originBase).ToList();
-                string originNumeralSystemName = originDropDownList.SelectedItem.Text;
-
-                int targetBase = Convert.ToInt32(targetDropDownList.SelectedValue);
-                List<char> targetNumeralSystem = masterNumeralSystem.Take(targetBase).ToList();
-
-                // read user input
-                string input = inputTextBox.Text;
-                string originalInput = input;
-                if (input[0] == '-')
+                if (inputTextBox.Text.Trim(' ').Length == 0)
                 {
-                    input = input.TrimStart('-');
+                    throw new NothingShallComeFromNothingException();
                 }
-                input = input.TrimStart(' ', '0');
-                input = input.Length > 0 ? input : "0"; 
-                char[] inputArray = input.ToCharArray();
-
-                // validate user input
-                if (HelperMethods.ValidateInput(originNumeralSystem, inputArray, resultLabel.Text, originNumeralSystemName, originBase, targetBase, input, placesTextBox.Text, originalInput))
+                else
                 {
-                    var places = Convert.ToInt32(placesTextBox.Text);
-                    // convert user input to decimal
-                    double decimalInput = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem, resultLabel.Text, places);
-                    resultLabel.Text = decimalInput.ToString();
-                    // convert user input from decimal to target base
-                    string targetOutput = HelperMethods.ConvertDecimalToTarget(resultLabel.Text, decimalInput, masterNumeralSystem, targetNumeralSystem, targetBase, places);
-                    // display result
-                    resultLabel.Text = HelperMethods.FormatResultForDisplay(input, inputArray, targetOutput, originBase, targetBase, inputTextBox.Text, places);
+                    resultLabel.Text = "";
+
+                    // initialize masterNumeralSystem list and create originNumeralSystem and targetNumeralSystem lists from user selection
+                    List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
+
+                    int originBase = Convert.ToInt32(originDropDownList.SelectedValue);
+                    List<char> originNumeralSystem = masterNumeralSystem.Take(originBase).ToList();
+                    string originNumeralSystemName = originDropDownList.SelectedItem.Text;
+
+                    int targetBase = Convert.ToInt32(targetDropDownList.SelectedValue);
+                    List<char> targetNumeralSystem = masterNumeralSystem.Take(targetBase).ToList();
+
+                    // read user input
+                    string input = inputTextBox.Text;
+                    string originalInput = input;
+                    if (input[0] == '-')
+                    {
+                        input = input.TrimStart('-');
+                    }
+                    input = input.TrimStart(' ', '0');
+                    input = input.Length > 0 ? input : "0";
+                    char[] inputArray = input.ToCharArray();
+
+                    // validate user input
+                    if (HelperMethods.ValidateInput(originNumeralSystem, inputArray, resultLabel.Text, originNumeralSystemName, originBase, targetBase, input, placesTextBox.Text, originalInput))
+                    {
+                        var places = Convert.ToInt32(placesTextBox.Text);
+                        // convert user input to decimal
+                        double decimalInput = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem, resultLabel.Text, places);
+                        resultLabel.Text = decimalInput.ToString();
+                        // convert user input from decimal to target base
+                        string targetOutput = HelperMethods.ConvertDecimalToTarget(resultLabel.Text, decimalInput, masterNumeralSystem, targetNumeralSystem, targetBase, places);
+                        // display result
+                        resultLabel.Text = HelperMethods.FormatResultForDisplay(input, inputArray, targetOutput, originBase, targetBase, inputTextBox.Text, places);
+                    }
                 }
             }
             // exception handling
+            catch (NothingShallComeFromNothingException)
+            {
+                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please fill out all required fields?</span>";
+            }
             catch (OriginNumeralSystemLacksCharacterException ex)
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>Would you please only enter characters that exist in the " + ex.NumeralSystemName + " number system?</span>";

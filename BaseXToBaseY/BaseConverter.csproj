@@ -93,6 +93,7 @@
     <Compile Include="Exceptions\MisplacedMinusException.cs" />
     <Compile Include="Exceptions\NegativeZeroException.cs" />
     <Compile Include="Exceptions\NoDogsOnTheMoonException.cs" />
+    <Compile Include="Exceptions\NothingShallComeFromNothingException.cs" />
     <Compile Include="Exceptions\OriginNumeralSystemLacksCharacterException.cs" />
     <Compile Include="Exceptions\TooManyMinusesException.cs" />
     <Compile Include="Exceptions\TooManyPeriodsException.cs" />

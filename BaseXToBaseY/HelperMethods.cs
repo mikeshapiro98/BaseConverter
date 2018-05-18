@@ -46,7 +46,9 @@ namespace BaseXToBaseY
                 throw new MisplacedMinusException();
             }
             // throw exceptions in unary
-            if ((inputArray.Length == 1 && inputArray[0] == '0' && targetBase == 1) || originalInput.Contains('0') || originalInput.Contains('.'))
+            if ((inputArray.Length == 1 && inputArray[0] == '0' && targetBase == 1) 
+                || (originalInput.Contains('0') && targetBase == 1) 
+                || (originalInput.Contains('.') && targetBase == 1))
             {
                 throw new NoDogsOnTheMoonException();
             }

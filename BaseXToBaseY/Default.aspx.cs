@@ -23,9 +23,10 @@ namespace BaseXToBaseY
                 }
                 else
                 {
+                    // clear resultLabel
                     resultLabel.Text = "";
 
-                    // initialize masterNumeralSystem list and create originNumeralSystem and targetNumeralSystem lists from user selection
+                    // initialize master numeral system list, create origin and target numeral system lists from user selections
                     List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
 
                     int originBase = Convert.ToInt32(originDropDownList.SelectedValue);
@@ -35,28 +36,43 @@ namespace BaseXToBaseY
                     int targetBase = Convert.ToInt32(targetDropDownList.SelectedValue);
                     List<char> targetNumeralSystem = masterNumeralSystem.Take(targetBase).ToList();
 
-                    // read user input
+                    // prepare user input for use
                     string input = inputTextBox.Text;
-                    string originalInput = input;
+                    bool inputNegative = false;
+
                     if (input[0] == '-')
                     {
                         input = input.TrimStart('-');
+                        inputNegative = true;
                     }
+
                     input = input.TrimStart(' ', '0');
+
+                    if (input.Contains('.'))
+                    {
+                        input.TrimEnd('0');
+                    }
+
                     input = input.Length > 0 ? input : "0";
                     char[] inputArray = input.ToCharArray();
 
                     // validate user input
-                    if (HelperMethods.ValidateInput(originNumeralSystem, inputArray, resultLabel.Text, originNumeralSystemName, originBase, targetBase, input, placesTextBox.Text, originalInput))
+                    if (HelperMethods.ValidateInput(inputArray, originNumeralSystem, originNumeralSystemName, input, targetBase, originBase, placesTextBox.Text))
                     {
                         var places = Convert.ToInt32(placesTextBox.Text);
-                        // convert user input to decimal
-                        double decimalInput = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem, resultLabel.Text, places);
-                        resultLabel.Text = decimalInput.ToString();
-                        // convert user input from decimal to target base
-                        string targetOutput = HelperMethods.ConvertDecimalToTarget(resultLabel.Text, decimalInput, masterNumeralSystem, targetNumeralSystem, targetBase, places);
-                        // display result
-                        resultLabel.Text = HelperMethods.FormatResultForDisplay(input, inputArray, targetOutput, originBase, targetBase, inputTextBox.Text, places);
+
+                        // convert input to decimal
+                        double inputAsDecimal = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem);
+
+                        // prepare inputAsDecimal for use, preventing scientific notation
+                        string inputAsDecimalString = inputAsDecimal.ToString(Formatter.Notation);
+                        char[] inputAsDecimalArray = inputAsDecimalString.ToCharArray();
+
+                        // convert decimal to target base
+                        string targetResult = HelperMethods.ConvertDecimalToTarget(inputAsDecimalArray, inputAsDecimal, targetNumeralSystem, targetBase, places);
+                        
+                        // display results
+                        resultLabel.Text = HelperMethods.FormatConversionForDisplay(inputNegative, input, targetResult, originBase, targetBase);
                     }
                 }
             }
@@ -69,17 +85,9 @@ namespace BaseXToBaseY
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>Would you please only enter characters that exist in the " + ex.NumeralSystemName + " number system?</span>";
             }
-            catch (TooManyMinusesException)
-            {
-                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple minus signs?</span>";
-            }
             catch (TooManyPeriodsException)
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple periods?</span>";
-            }
-            catch (MisplacedMinusException)
-            {
-                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter a minus sign anywhere but the front of your number?</span>";
             }
             catch (InvalidPlacesException)
             {

@@ -80,23 +80,23 @@ namespace BaseXToBaseY
                         operation = '/';
                     }
 
-                    // validate user num1
-                    if (HelperMethods.ValidateInput(num1NumeralSystem, num1Array, calculationLabel.Text, num1NumeralSystemName, num1Base, targetBase, num1, placesTextBox.Text, num1)
-                        && HelperMethods.ValidateInput(num2NumeralSystem, num2Array, calculationLabel.Text, num2NumeralSystemName, num2Base, targetBase, num2, placesTextBox.Text, num2))
-                    {
-                        // convert user num1 to decimal
-                        double decimalNum1 = HelperMethods.ConvertInputToDecimal(num1Array, num1Base, masterNumeralSystem, calculationLabel.Text, places);
-                        double decimalNum2 = HelperMethods.ConvertInputToDecimal(num2Array, num2Base, masterNumeralSystem, calculationLabel.Text, places);
+                    //// validate user num1
+                    //if (HelperMethods.ValidateInput(num1NumeralSystem, num1Array, calculationLabel.Text, num1NumeralSystemName, num1Base, targetBase, num1, placesTextBox.Text, num1)
+                    //    && HelperMethods.ValidateInput(num2NumeralSystem, num2Array, calculationLabel.Text, num2NumeralSystemName, num2Base, targetBase, num2, placesTextBox.Text, num2))
+                    //{
+                    //    // convert user num1 to decimal
+                    //    double decimalNum1 = HelperMethods.ConvertInputToDecimal(num1Array, num1Base, masterNumeralSystem, calculationLabel.Text, places);
+                    //    double decimalNum2 = HelperMethods.ConvertInputToDecimal(num2Array, num2Base, masterNumeralSystem, calculationLabel.Text, places);
 
-                        //do math
-                        double decimalTarget = HelperMethods.Calculate(decimalNum1, decimalNum2, operation);
-                        string targetString = decimalTarget.ToString(Formatter.Notation);
-                        // convert result from decimal to target base
-                        string targetOutput = HelperMethods.ConvertDecimalToTarget(targetString, decimalTarget, masterNumeralSystem, targetNumeralSystem, targetBase, places);
+                    //    //do math
+                    //    double decimalTarget = HelperMethods.Calculate(decimalNum1, decimalNum2, operation);
+                    //    string targetString = decimalTarget.ToString(Formatter.Notation);
+                    //    // convert result from decimal to target base
+                    //    string targetOutput = HelperMethods.ConvertDecimalToTarget(targetString, decimalTarget, masterNumeralSystem, targetNumeralSystem, targetBase, places);
 
-                        // display result
-                        calculationLabel.Text = HelperMethods.FormatCalculationForDisplay(num1, num1Base, operation, num2, num2Base, targetOutput, targetBase);
-                    }
+                    //    // display result
+                    //    calculationLabel.Text = HelperMethods.FormatCalculationForDisplay(num1, num1Base, operation, num2, num2Base, targetOutput, targetBase);
+                    //}
                 }
             }
             // exception handling
@@ -108,17 +108,9 @@ namespace BaseXToBaseY
             {
                 calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please only enter characters that exist in the " + ex.NumeralSystemName + " number system?</span>";
             }
-            catch (TooManyMinusesException)
-            {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple minus signs?</span>";
-            }
             catch (TooManyPeriodsException)
             {
                 calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple periods?</span>";
-            }
-            catch (MisplacedMinusException)
-            {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter a minus sign anywhere but the front of your number?</span>";
             }
             catch (InvalidPlacesException)
             {

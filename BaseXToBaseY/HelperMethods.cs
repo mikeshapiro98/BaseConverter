@@ -9,51 +9,36 @@ namespace BaseXToBaseY
     {
 
         // prevent faulty user input
-        public static bool ValidateInput(List<char> originNumeralSystem, char[] inputArray, string result, string originNumeralSystemName, int originBase, int targetBase, string input, string placesText, string originalInput)
+        public static bool ValidateInput(char[] inputArray, List<char> originNumeralSystem, string originNumeralSystemName, string input, int targetBase, int originBase, string placesText)
         {
             // initialize minus and period counters
-            var minusCounter = 0;
             var periodCounter = 0;
-            // track quantity of minuses and periods in inputArray
+            // track quantity of minuses and periods in input array
             foreach (var digit in inputArray)
             {
-                if (digit == '-')
-                {
-                    minusCounter++;
-                }
-                else if (digit == '.')
+                if (digit == '.')
                 {
                     periodCounter++;
                 }
-                // ensure every char in inputArray exists in originNumeralSystem
+                // ensure every char in input array exists in origin numeral system
                 else if (!originNumeralSystem.Contains(digit))
                 {
                     throw new OriginNumeralSystemLacksCharacterException(originNumeralSystemName);
                 }
             }
-            // throw exceptions if there are multiple minuses or periods
-            if (minusCounter > 1)
-            {
-                throw new TooManyMinusesException();
-            }
+            // throw exceptions if input contains multiple periods
             if (periodCounter > 1)
             {
                 throw new TooManyPeriodsException();
             }
-            // throw exceptions if there's an inappropriate minus
-            if (minusCounter == 1 && inputArray[0] != '-')
-            {
-                throw new MisplacedMinusException();
-            }
-            // throw exceptions in unary
-            if ((inputArray.Length == 1 && inputArray[0] == '0' && targetBase == 1) 
-                || (originalInput.Contains('0') && targetBase == 1) 
-                || (originalInput.Contains('.') && targetBase == 1))
+            // unary lacks 0 and fractional numbers
+            if ((input.Contains('0') && targetBase == 1) 
+                || (input.Contains('.') && targetBase == 1))
             {
                 throw new NoDogsOnTheMoonException();
             }
-            // if input == 0
-            if (input.Equals(0))
+            // format zero
+            if (Convert.ToInt32(input).Equals(0))
             {
                 throw new FormatZeroException(originBase, targetBase);
             }
@@ -66,36 +51,36 @@ namespace BaseXToBaseY
             return true;
         }
 
-        public static double ConvertInputToDecimal(char[] inputArray, int originBase, List<char> masterNumeralSystem, string result, int places)
+        public static double ConvertInputToDecimal(char[] inputArray, int originBase, List<char> masterNumeralSystem)
         {
-            result = "";
-            // split array on the period
-            if (inputArray.Contains('.'))
+            double inputAsDecimal;
+            // if input contains no fractional part
+            if (!inputArray.Contains('.'))
             {
+                // assign decimal value of integer to result
+                inputAsDecimal = CalculateDecimalValueOfInteger(inputArray, originBase, masterNumeralSystem);
+            }
+            // if input contains a fractional part
+            else
+            {
+                // split array on the period
                 char[] integerArray = inputArray.TakeWhile(x => x != '.').ToArray();
                 char[] fractionArray = inputArray.SkipWhile(x => x != '.').ToArray();
                 fractionArray = fractionArray.Skip(1).ToArray();
-                // append decimal value of integer and decimal value of fraction to resultLabel
-                result += CalculateDecimalValueOfInteger(integerArray, originBase, masterNumeralSystem, places).ToString();
-                // remove leading 0. from fraction
-                string fraction = CalculateDecimalValueOfFraction(fractionArray, originBase, masterNumeralSystem, places);
-                if (fraction.Length > 0)
-                {
-                    fraction = fraction.TrimEnd('0');
-                    result += fraction;
-                }
-            }
-            else
-            {
-                result += CalculateDecimalValueOfInteger(inputArray, originBase, masterNumeralSystem, places).ToString();
+
+                // assign decimal value of integer part to result
+                inputAsDecimal = CalculateDecimalValueOfInteger(integerArray, originBase, masterNumeralSystem);
+
+                // assign decimal value of integer part + fractional part to result
+                double fraction = CalculateDecimalValueOfFraction(fractionArray, originBase, masterNumeralSystem);
+                inputAsDecimal += fraction;
             }
             // return decimal value of input
-            double decimalInput = Convert.ToDouble(result);
-            return decimalInput;
+            return inputAsDecimal;
         }
 
         // calculate the decimal value of an integer
-        private static double CalculateDecimalValueOfInteger(char[] inputArray, int originBase, List<char> masterNumeralSystem, int places)
+        private static double CalculateDecimalValueOfInteger(char[] inputArray, int originBase, List<char> masterNumeralSystem)
         {
             // initialize decimal value and counter variables
             double decimalValue = 0;
@@ -104,15 +89,15 @@ namespace BaseXToBaseY
             for (int i = inputArray.Length - 1; i >= 0; i--)
             {
                 var digit = inputArray[i];
-                int digitValue = CalculateDigitValue(digit, masterNumeralSystem);
-                decimalValue += (digitValue * Convert.ToDouble(CalculatePlaceValue(originBase, placeCounter, places)));
+                double digitValue = CalculateDigitValue(digit, masterNumeralSystem);
+                decimalValue += (digitValue * CalculatePlaceValue(originBase, placeCounter));
                 placeCounter++;
             }
             return decimalValue;
         }
 
         // calculate the decimal value of a fraction
-        private static string CalculateDecimalValueOfFraction(char[] inputArray, int originBase, List<char> masterNumeralSystem, int places)
+        private static double CalculateDecimalValueOfFraction(char[] inputArray, int originBase, List<char> masterNumeralSystem)
         {
             // initialize decimal value and counter variables
             double decimalValue = 0;
@@ -121,19 +106,19 @@ namespace BaseXToBaseY
             for (int i = inputArray.Length - 1; i >= 0; i--)
             {
                 var digit = inputArray[i];
-                double digitValue = Convert.ToDouble(CalculateDigitValue(digit, masterNumeralSystem));
-                decimalValue += (digitValue * Convert.ToDouble(CalculatePlaceValue(originBase, placeCounter, places)));
+                // calculate digit value and convert it to a double in order to multiply it by place value
+                double digitValue = CalculateDigitValue(digit, masterNumeralSystem);
+                // increase decimal value by the value of the digit times the value of the place
+                decimalValue += (digitValue * CalculatePlaceValue(originBase, placeCounter));
                 placeCounter++;
             }
-            // prevent C# from implementing scientific notation when it converts a double to a string
-            string decimalInput = decimalValue.ToString(Formatter.Notation);
-            return decimalInput;
+            return decimalValue;
         }
 
         // calculate the decimal value of a digit
-        private static int CalculateDigitValue(char digit, List<char> masterNumeralSystem)
+        private static double CalculateDigitValue(char digit, List<char> masterNumeralSystem)
         {
-            // initialize digit variable
+            // initialize digit value
             int digitValue;
             // account for unary and binary edge cases
             if (digit == '0')
@@ -144,7 +129,7 @@ namespace BaseXToBaseY
             {
                 digitValue = 1;
             }
-            // otherwise, retrieve the decimal value of the digit from its index in the masterNumeralSystem list
+            // retrieve the decimal value of the digit from its index in the masterNumeralSystem list
             else
             {
                 digitValue = masterNumeralSystem.IndexOf(digit);
@@ -152,65 +137,65 @@ namespace BaseXToBaseY
             return digitValue;
         }
 
-        // calculate the decimal value of a given place by raising the originBase to the power of that place
-        private static string CalculatePlaceValue(int givenBase, int placeCounter, int places)
+        // calculate the decimal value of a given place by raising the base to the power of that place
+        private static double CalculatePlaceValue(int givenBase, int placeCounter)
         {
             // convert originBase and placeCounter to doubles to use C# Math.Pow function
             double doubleBase = Convert.ToDouble(givenBase);
             double doublePlace = Convert.ToDouble(placeCounter);
-            // calculate placeValue and convert it to a long for return
-            double doublePlaceValue = Math.Pow(doubleBase, doublePlace);
-            // prevent C# from implementing scientific notation when it converts a double to a string
-            string stringPlaceValue = doublePlaceValue.ToString(Formatter.Notation);
-            return stringPlaceValue;
+            // calculate placeValue
+            double placeValue = Math.Pow(doubleBase, doublePlace);
+            return placeValue;
         }
 
-        public static string ConvertDecimalToTarget(string result, double decimalInput, List<char> masterNumeralSystem, List<char> targetNumeralSystem, int targetBase, int places)
+        public static string ConvertDecimalToTarget(char[] inputAsDecimalArray, double inputAsDecimal, List<char> targetNumeralSystem, int targetBase, int places)
         {
-            // split decimal value of input into a character array
-            char[] decimalInputArray = result.ToCharArray();
-            
             string targetResult = "";
-
-            // split array on the period
-            if (decimalInputArray.Contains('.'))
+            int decimalInteger;
+            // if input does not contain a fractional part
+            if (!inputAsDecimalArray.Contains('.'))
+            {
+                // convert inputAsDecimal to int, calculate its new value in targetNumeralSystem, assign that value to targetResult
+                decimalInteger = Convert.ToInt32(inputAsDecimal);
+                targetResult = CalculateBaseXIntegerValue(targetBase, decimalInteger, targetNumeralSystem);
+            }
+            // if input contains a fractional part
+            else
             {
                 // split decimalInputArray on the period into integerArray and fractionArray
-                char[] newIntegerArray = decimalInputArray.TakeWhile(x => x != '.').ToArray();
-                char[] newFractionArray = decimalInputArray.SkipWhile(x => x != '.').ToArray();
+                char[] newIntegerArray = inputAsDecimalArray.TakeWhile(x => x != '.').ToArray();
+                char[] newFractionArray = inputAsDecimalArray.SkipWhile(x => x != '.').ToArray();
 
                 // convert integerArray and fractionArray into strings
                 string integerString = new string(newIntegerArray);
                 string fractionString = new string(newFractionArray);
 
                 // convert integerString and fractionString into a long and a double, respectively
-                long longDecimalInput = Convert.ToInt64(integerString);
-                double fractionDecimalInput = Convert.ToDouble(fractionString);
+                decimalInteger = Convert.ToInt32(integerString);
+                double decimalFraction = Convert.ToDouble(fractionString);
 
-                //  calculate longInput's value in the targetNumeralSystem, append that value to resultLabel
-                string integerResult = CalculateBaseXIntegerValue(targetBase, longDecimalInput, targetNumeralSystem, targetResult, places);
-                // calculate fractionInput's value in the targetNumeralSystem, append a period and that value to resultLabel
-                string fractionResult = CalculateBaseXFractionValue(targetBase, fractionDecimalInput, targetNumeralSystem, targetResult, places);
+                //  calculate decimalInteger value in the targetNumeralSystem, assign that value to integerResult
+                string integerResult = CalculateBaseXIntegerValue(targetBase, decimalInteger, targetNumeralSystem);
+
+                // calculate fractionInput value in the targetNumeralSystem, assign that value to fractionResult
+                string fractionResult = CalculateBaseXFractionValue(targetBase, decimalFraction, targetNumeralSystem, places);
+
+                // assign integerResult.fractionResult to targetResult
                 targetResult = integerResult + '.' + fractionResult;
-            }
-            else
-            {
-                // convert decimalInput to long, calculate its new value in the targetNumeralSystem, append that value to resultLabel
-                long longDecimalInput = Convert.ToInt64(decimalInput);
-                targetResult += CalculateBaseXIntegerValue(targetBase, longDecimalInput, targetNumeralSystem, targetResult, places);
             }
             return targetResult;
         }
 
-        private static string CalculateBaseXIntegerValue(int targetBase, long longInput, List<char> targetNumeralSystem, string targetResult, int places)
+        private static string CalculateBaseXIntegerValue(int targetBase, int decimalInteger, List<char> targetNumeralSystem)
         {
+            string integerResult = "";
             // edge case: if targetBase is unary
             if (targetBase == 1)
             {
-                for (int i = 0; i < longInput; i++)
+                for (int i = 0; i < decimalInteger; i++)
                 {
                     // append a number of tally marks equal to longInput to resultLabel
-                    targetResult += '1';
+                    integerResult += '1';
                 }
             }
             else
@@ -218,84 +203,87 @@ namespace BaseXToBaseY
                 // initialize placeCounter and placeValue variables
                 int placeCounter = 0;
                 double placeValue = 1;
+
                 // increment placeCounter and recalculate placeValue until placeValue > intInput
-                while (longInput >= placeValue)
+                while (decimalInteger >= placeValue)
                 {
                     placeCounter++;
-                    placeValue = Convert.ToDouble(CalculatePlaceValue(targetBase, placeCounter, places));
+                    placeValue = CalculatePlaceValue(targetBase, placeCounter);
                 }
+
                 // decrement placeCounter and recalculate placeValue
                 placeCounter--;
-                placeValue = Convert.ToDouble(CalculatePlaceValue(targetBase, placeCounter, places));
-                // convert longInput to targetBase and append converted number, character by character, to resultLabel
+                placeValue = CalculatePlaceValue(targetBase, placeCounter);
+
+                // convert decimalInteger to targetBase and append converted number, character by character, to integerResult
                 while (placeCounter >= 0)
                 {
-                    if (longInput >= placeValue)
+                    if (decimalInteger >= placeValue)
                     {
                         // calculate dividend
-                        long dividend = longInput / Convert.ToInt64(placeValue);
+                        int dividend = decimalInteger / Convert.ToInt32(placeValue);
+
                         // determine digit equal to dividend in targetNumeralSystem
                         char digit = DetermineDigit(dividend, targetNumeralSystem);
-                        // append digit to resultLabel
-                        targetResult += digit.ToString();
+
+                        // append digit to integerResult
+                        integerResult += digit.ToString();
+
                         // subtract placeValue from intInput
-                        longInput -= (Convert.ToInt64(placeValue) * dividend);
+                        decimalInteger -= (Convert.ToInt32(placeValue) * dividend);
                     }
                     else
                     {
-                        targetResult += '0';
+                        integerResult += '0';
                     }
                     // decrement placeCounter and recalculate placeValue
                     placeCounter--;
-                    placeValue = Convert.ToDouble(CalculatePlaceValue(targetBase, placeCounter, places));
+                    placeValue = CalculatePlaceValue(targetBase, placeCounter);
                 }
             }
-            return targetResult;
+            return integerResult;
         }
 
-        private static string CalculateBaseXFractionValue(int targetBase, double fractionInput, List<char> targetNumeralSystem, string targetResult, int places)
+        private static string CalculateBaseXFractionValue(int targetBase, double fractionInput, List<char> targetNumeralSystem, int places)
         {
-            // edge case: if targetBase is unary
-            if (targetBase == 1)
+            string fractionResult = "";
+            // throw exception if places is not positive
+            if (places < 0)
             {
-                throw new NoDogsOnTheMoonException();
+                throw new InvalidPlacesException();
             }
-            else
+            // convert targetBase to a double to use in multiplication
+            double doubleBase = Convert.ToDouble(targetBase);
+
+            // initialize loopCounter
+            int loopCounter = 0;
+
+            // set while loop to terminate when fractionInput has been fully converted, or when # of places is reached
+            while (fractionInput > 0 && loopCounter < places)
             {
-                // throw exception if places is not a positive int
-                if (places < 0)
-                {
-                    throw new InvalidPlacesException();
-                }
-                else
-                {
-                    // convert targetBase to a double to use in multiplication
-                    double doubleBase = Convert.ToDouble(targetBase);
-                    // initialize loopCounter
-                    int loopCounter = 0;
-                    // set while loop to terminate when fractionInput has been fully converted, or when # of places is reached
-                    while (fractionInput > 0 && loopCounter < places)
-                    {
-                        // multiply fractionInput by targetBase, assign to double appendageCarry
-                        double appendageCarry = fractionInput * targetBase;
-                        // assign integer part of appendageCarry to int appendage
-                        int appendage = Convert.ToInt16(Math.Floor(appendageCarry));
-                        // determine digit equal to appendage in targetNumeralSystem
-                        char digit = DetermineDigit(appendage, targetNumeralSystem);
-                        // add digit to resultLabel
-                        targetResult += digit;
-                        // set fractionInput equal to appendageCarry minus appendage
-                        fractionInput = appendageCarry - appendage;
-                        // increment loopCounter
-                        loopCounter++;
-                    }
-                }
+                // multiply fractionInput by targetBase, assign to double appendageCarry
+                double appendageCarry = fractionInput * targetBase;
+
+                // assign integer part of appendageCarry to int appendage
+                int appendage = Convert.ToInt32(Math.Floor(appendageCarry));
+
+                // determine digit equal to appendage in targetNumeralSystem
+                char digit = DetermineDigit(appendage, targetNumeralSystem);
+
+                // append digit to fractionResult
+                fractionResult += digit;
+
+                // set fractionInput equal to appendageCarry minus appendage
+                fractionInput = appendageCarry - appendage;
+
+                // increment loopCounter
+                loopCounter++;
             }
-            return targetResult;
+            return fractionResult.TrimEnd('0');
         }
 
         // calculate the digit character of a given decimal value
-        private static char DetermineDigit(long dividend, List<char> targetNumeralSystem)
+        private static char DetermineDigit(int dividend, List<char> targetNumeralSystem)
         {
             char digitCharacter;
             if (dividend == 1)
@@ -308,46 +296,28 @@ namespace BaseXToBaseY
             }
             else
             {
-                digitCharacter = targetNumeralSystem.ElementAt(Convert.ToInt32(dividend));
+                digitCharacter = targetNumeralSystem.ElementAt(dividend);
             }
             return digitCharacter;
         }
 
-        public static string FormatResultForDisplay(string input, char[] inputArray, string result, int originBase, int targetBase, string originalInput, int places)
+        public static string FormatConversionForDisplay(bool inputNegative, string input, string targetResult, int originBase, int targetBase)
         {
-            // final validation
-            char[] check1Array = inputArray.SkipWhile(x => x != '.').ToArray();
-            check1Array = check1Array.Skip(1).ToArray();
-            char[] check2Array = check1Array.SkipWhile(x => x == '0').ToArray();
-            if (input == "0")
-            {
-                result = "0";
-            }
-            else if (originalInput.Contains('.') && check2Array.Length == 0)
-            {
-                input = "0";
-                result = "0";
-            }
             //handle negatives
-            if (originalInput[0] == '-' && input != "0")
+            if (inputNegative)
             {
                 input = input.Insert(0, "-");
-                result = result.Insert(0, "-");
-            }
-
-            if (input.Contains('.'))
-            {
-                input = input.TrimEnd('0');
+                targetResult = targetResult.Insert(0, "-");
             }
 
             // format results for display
-            result = String.Format("{0}<sub>{1}</sub> = {2}<sub>{3}</sub>",
+            string formattedResult = String.Format("{0}<sub>{1}</sub> = {2}<sub>{3}</sub>",
                 input,
                 originBase,
-                result,
+                targetResult,
                 targetBase);
 
-            return result;
+            return formattedResult;
         }
 
         // add, subtract, multiply, or divide

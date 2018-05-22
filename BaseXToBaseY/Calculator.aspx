@@ -11,8 +11,8 @@
         <div>
             <asp:Button ID="converterButton" PostBackUrl="~/Default.aspx" runat="server" Text="Converter" />
             <asp:Button Enabled="false" ID="calculatorButton" PostBackUrl="~/Calculator.aspx" runat="server" Text="Calculator" /><br /><br />
-            Select Num1 numeral system:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select Num2 numeral system:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select result numeral system:<br />
-            <asp:DropDownList ID="num1DropDownList" runat="server">
+            <p>Select Num1 numeral system:
+                <asp:DropDownList ID="num1DropDownList" runat="server">
                 <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
                 <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
@@ -115,7 +115,9 @@
                 <asp:ListItem Value="100" Text="Base 100 (Centesimal)"></asp:ListItem>
                 <asp:ListItem Value="101" Text="Base 101 (Uncentesimal)"></asp:ListItem>
             </asp:DropDownList>  
-            &nbsp;&nbsp;&nbsp; <asp:DropDownList ID="num2DropDownList" runat="server">
+            </p>
+            <p>Select Num2 numeral system:
+                <asp:DropDownList ID="num2DropDownList" runat="server">
                 <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
                 <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
@@ -218,7 +220,9 @@
                 <asp:ListItem Value="100" Text="Base 100 (Centesimal)"></asp:ListItem>
                 <asp:ListItem Value="101" Text="Base 101 (Uncentesimal)"></asp:ListItem>
             </asp:DropDownList>
-        &nbsp;&nbsp;&nbsp; <asp:DropDownList ID="targetDropDownList" runat="server">
+            </p>
+            <p>Select target numeral system:
+                <asp:DropDownList ID="targetDropDownList" runat="server">
                 <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
                 <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
@@ -321,16 +325,18 @@
                 <asp:ListItem Value="100" Text="Base 100 (Centesimal)"></asp:ListItem>
                 <asp:ListItem Value="101" Text="Base 101 (Uncentesimal)"></asp:ListItem>
             </asp:DropDownList>
+            </p>
             <br />
-            <br />
-            Num1:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Num2:<br />
+            Num1:
             <asp:TextBox ID="num1TextBox" runat="server"></asp:TextBox>
 &nbsp;
+            <br />
             <asp:RadioButton ID="additionRadioButton" runat="server" Checked="True" GroupName="mathGroup" Text="+" />
 &nbsp;<asp:RadioButton ID="subtractionRadioButton" runat="server" GroupName="mathGroup" Text="-" />
 &nbsp;<asp:RadioButton ID="multiplicationRadioButton" runat="server" GroupName="mathGroup" Text="*" />
 &nbsp;<asp:RadioButton ID="divisionRadioButton" runat="server" GroupName="mathGroup" Text="/" />
-&nbsp;&nbsp;
+&nbsp;&nbsp;<br />
+            Num2:&nbsp;
             <asp:TextBox ID="num2TextBox" runat="server" Width="127px"></asp:TextBox>
             <br />
             <br />

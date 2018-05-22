@@ -13,8 +13,8 @@
             <asp:Button Enabled="false" ID="calculatorButton" PostBackUrl="~/Calculator.aspx" runat="server" Text="Calculator" /><br /><br />
             Select Num1 numeral system:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select Num2 numeral system:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select result numeral system:<br />
             <asp:DropDownList ID="num1DropDownList" runat="server">
-                <asp:ListItem Selected="True" Value="1" Text="Base 1 (Unary)"></asp:ListItem>
-                <asp:ListItem Value="2" Text="Base 2 (Binary)"></asp:ListItem>
+                <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
+                <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
                 <asp:ListItem Value="4" Text="Base 4 (Quaternary)"></asp:ListItem>
                 <asp:ListItem Value="5" Text="Base 5 (Quinary)"></asp:ListItem>
@@ -116,8 +116,8 @@
                 <asp:ListItem Value="101" Text="Base 101 (Uncentesimal)"></asp:ListItem>
             </asp:DropDownList>  
             &nbsp;&nbsp;&nbsp; <asp:DropDownList ID="num2DropDownList" runat="server">
-                <asp:ListItem Selected="True" Value="1" Text="Base 1 (Unary)"></asp:ListItem>
-                <asp:ListItem Value="2" Text="Base 2 (Binary)"></asp:ListItem>
+                <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
+                <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
                 <asp:ListItem Value="4" Text="Base 4 (Quaternary)"></asp:ListItem>
                 <asp:ListItem Value="5" Text="Base 5 (Quinary)"></asp:ListItem>
@@ -219,8 +219,8 @@
                 <asp:ListItem Value="101" Text="Base 101 (Uncentesimal)"></asp:ListItem>
             </asp:DropDownList>
         &nbsp;&nbsp;&nbsp; <asp:DropDownList ID="targetDropDownList" runat="server">
-                <asp:ListItem Selected="True" Value="1" Text="Base 1 (Unary)"></asp:ListItem>
-                <asp:ListItem Value="2" Text="Base 2 (Binary)"></asp:ListItem>
+                <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
+                <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
                 <asp:ListItem Value="3" Text="Base 3 (Ternary)"></asp:ListItem>
                 <asp:ListItem Value="4" Text="Base 4 (Quaternary)"></asp:ListItem>
                 <asp:ListItem Value="5" Text="Base 5 (Quinary)"></asp:ListItem>
@@ -332,11 +332,6 @@
 &nbsp;<asp:RadioButton ID="divisionRadioButton" runat="server" GroupName="mathGroup" Text="/" />
 &nbsp;&nbsp;
             <asp:TextBox ID="num2TextBox" runat="server" Width="127px"></asp:TextBox>
-&nbsp;
-            <br />
-            <br />
-            Enter the # of places up to which you wish your answer to be precise (the higher this number, the longer the conversion may take):<br />
-            <asp:TextBox ID="placesTextBox" runat="server">9</asp:TextBox>
             <br />
             <br />
             <asp:Button ID="equalsButton" runat="server" Text="=" OnClick="equalsButton_Click" />

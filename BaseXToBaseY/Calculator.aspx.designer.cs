@@ -121,15 +121,6 @@ namespace BaseXToBaseY {
         protected global::System.Web.UI.WebControls.TextBox num2TextBox;
         
         /// <summary>
-        /// placesTextBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox placesTextBox;
-        
-        /// <summary>
         /// equalsButton control.
         /// </summary>
         /// <remarks>

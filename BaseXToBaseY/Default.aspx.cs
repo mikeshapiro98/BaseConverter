@@ -42,8 +42,7 @@ namespace BaseXToBaseY
 
                     // prepare user input for use
                     string input = inputTextBox.Text;
-
-                    // strip minus sign from input
+                    
                     bool inputNegative = false;
                     if (input[0] == '-')
                     {

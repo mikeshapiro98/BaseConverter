@@ -325,8 +325,17 @@ namespace BaseXToBaseY
         }
 
         // add, subtract, multiply, or divide
-        internal static double Calculate(double decimalNum1, double decimalNum2, int operation)
+        internal static double Calculate(double decimalNum1, bool num1Negative, double decimalNum2, bool num2Negative, char operation)
         {
+            if (num1Negative)
+            {
+                decimalNum1 = decimalNum1 * -1;
+            }
+            if (num2Negative)
+            {
+                decimalNum2 = decimalNum2 * -1;
+            }
+
             double decimalTarget;
             switch (operation)
             {
@@ -347,15 +356,43 @@ namespace BaseXToBaseY
         }
 
         // display calculation
-        internal static string FormatCalculationForDisplay(string num1, int num1Base, char operation, string num2, int num2Base, string targetOutput, int targetBase)
+        public static string FormatCalculationForDisplay(string num1, string num2, string targetResult, bool num1Negative, bool num2Negative, bool resultNegative, char operation, int num1Base, int num2Base, int targetBase)
         {
+            if (num1[0] == '.')
+            {
+                num1.Insert(0, "0");
+            }
+            if (num2[0] == '.')
+            {
+                num2.Insert(0, "0");
+            }
+            if (targetResult[0] == '.')
+            {
+                targetResult.Insert(0, "0");
+            }
+
+            //handle negatives
+            if (num1Negative)
+            {
+                num1 = num1.Insert(0, "-");
+            }
+            if (num2Negative)
+            {
+                num2 = num2.Insert(0, "-");
+            }
+            if (resultNegative)
+            {
+                targetResult = targetResult.Insert(0, "-");
+            }
+
+            // format results for display
             string result = String.Format("{0}<sub>{1}</sub> {2} {3}<sub>{4}</sub> = {5}<sub>{6}</sub>",
                 num1,
                 num1Base,
                 operation,
                 num2,
                 num2Base,
-                targetOutput,
+                targetResult,
                 targetBase);
             return result;
         }

@@ -227,10 +227,6 @@
             </asp:DropDownList>
             <br />
             <br />
-            Enter the # of places up to which you wish your answer to be precise (the higher this number, the longer the conversion may take):<br />
-            <asp:TextBox ID="placesTextBox" runat="server">9</asp:TextBox>
-            <br />
-            <br />
             <asp:Button ID="convertButton" runat="server" Text="Convert" OnClick="convertButton_Click" />
             <br />
             <br />

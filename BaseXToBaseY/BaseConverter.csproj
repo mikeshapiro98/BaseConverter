@@ -88,8 +88,7 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Exceptions\FormatZeroException.cs" />
-    <Compile Include="Exceptions\InvalidPlacesException.cs" />
+    <Compile Include="Exceptions\IsNaNException.cs" />
     <Compile Include="Exceptions\NegativeZeroException.cs" />
     <Compile Include="Exceptions\NoDogsOnTheMoonException.cs" />
     <Compile Include="Exceptions\NothingShallComeFromNothingException.cs" />

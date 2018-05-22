@@ -21,6 +21,10 @@ namespace BaseXToBaseY
                 {
                     throw new NothingShallComeFromNothingException();
                 }
+                else if (inputTextBox.Text.Trim(' ') == ".")
+                {
+                    throw new IsNaNException();
+                }
                 else
                 {
                     // clear resultLabel
@@ -38,29 +42,32 @@ namespace BaseXToBaseY
 
                     // prepare user input for use
                     string input = inputTextBox.Text;
-                    bool inputNegative = false;
 
+                    // strip minus sign from input
+                    bool inputNegative = false;
                     if (input[0] == '-')
                     {
                         input = input.TrimStart('-');
                         inputNegative = true;
                     }
 
-                    input = input.TrimStart(' ', '0');
+                    input = input.TrimStart(' ','0');
 
                     if (input.Contains('.'))
                     {
-                        input.TrimEnd('0');
+                        input = input.TrimEnd('0');
                     }
 
-                    input = input.Length > 0 ? input : "0";
+                    if (input == "." || input.Length == 0)
+                    {
+                        input = "0";
+                    }
+                    
                     char[] inputArray = input.ToCharArray();
 
                     // validate user input
-                    if (HelperMethods.ValidateInput(inputArray, originNumeralSystem, originNumeralSystemName, input, targetBase, originBase, placesTextBox.Text))
+                    if (HelperMethods.ValidateInput(inputArray, originNumeralSystem, originNumeralSystemName, input, targetBase, originBase))
                     {
-                        var places = Convert.ToInt32(placesTextBox.Text);
-
                         // convert input to decimal
                         double inputAsDecimal = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem);
 
@@ -69,7 +76,7 @@ namespace BaseXToBaseY
                         char[] inputAsDecimalArray = inputAsDecimalString.ToCharArray();
 
                         // convert decimal to target base
-                        string targetResult = HelperMethods.ConvertDecimalToTarget(inputAsDecimalArray, inputAsDecimal, targetNumeralSystem, targetBase, places);
+                        string targetResult = HelperMethods.ConvertDecimalToTarget(inputAsDecimalArray, inputAsDecimal, targetNumeralSystem, targetBase);
                         
                         // display results
                         resultLabel.Text = HelperMethods.FormatConversionForDisplay(inputNegative, input, targetResult, originBase, targetBase);
@@ -81,6 +88,10 @@ namespace BaseXToBaseY
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>Would you please fill out all required fields?</span>";
             }
+            catch (IsNaNException)
+            {
+                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please enter a valid number?</span>";
+            }
             catch (OriginNumeralSystemLacksCharacterException ex)
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>Would you please only enter characters that exist in the " + ex.NumeralSystemName + " number system?</span>";
@@ -89,17 +100,9 @@ namespace BaseXToBaseY
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple periods?</span>";
             }
-            catch (InvalidPlacesException)
-            {
-                resultLabel.Text = "<span style='color:#B33A3A;'>Please enter a positive integer in the places field.</span>";
-            }
             catch (NoDogsOnTheMoonException)
             {
                 resultLabel.Text = "<span style='color:#B33A3A;'>There is no 0 and no fractional values in the Base 1 (Unary) system.</span>";
-            }
-            catch (FormatZeroException ex)
-            {
-                resultLabel.Text = "0<sub>" + ex.OriginBase + "</sub> = 0<sub>" + ex.TargetBase + "</sub>";
             }
             catch (Exception ex)
             {

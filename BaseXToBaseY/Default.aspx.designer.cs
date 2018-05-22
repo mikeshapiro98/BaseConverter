@@ -67,15 +67,6 @@ namespace BaseXToBaseY {
         protected global::System.Web.UI.WebControls.DropDownList targetDropDownList;
         
         /// <summary>
-        /// placesTextBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox placesTextBox;
-        
-        /// <summary>
         /// convertButton control.
         /// </summary>
         /// <remarks>

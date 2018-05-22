@@ -112,10 +112,6 @@ namespace BaseXToBaseY
             {
                 calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple periods?</span>";
             }
-            catch (InvalidPlacesException)
-            {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>Please enter a positive integer in the places field.</span>";
-            }
             catch (NoDogsOnTheMoonException)
             {
                 calculationLabel.Text = "<span style='color:#B33A3A;'>There is no 0 in the Base 1 (Unary) system.</span>";

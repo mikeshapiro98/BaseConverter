@@ -9,7 +9,7 @@ namespace BaseXToBaseY
     {
 
         // prevent faulty user input
-        public static bool ValidateInput(char[] inputArray, List<char> originNumeralSystem, string originNumeralSystemName, string input, int targetBase, int originBase, string placesText)
+        public static bool ValidateInput(char[] inputArray, List<char> originNumeralSystem, string originNumeralSystemName, string input, int targetBase, int originBase)
         {
             // initialize minus and period counters
             var periodCounter = 0;
@@ -37,17 +37,7 @@ namespace BaseXToBaseY
             {
                 throw new NoDogsOnTheMoonException();
             }
-            // format zero
-            if (Convert.ToInt32(input).Equals(0))
-            {
-                throw new FormatZeroException(originBase, targetBase);
-            }
-            // if places is not an int
-            bool precise = Int32.TryParse(placesText, out int places);
-            if (!precise)
-            {
-                throw new InvalidPlacesException();
-            }
+
             return true;
         }
 
@@ -148,12 +138,16 @@ namespace BaseXToBaseY
             return placeValue;
         }
 
-        public static string ConvertDecimalToTarget(char[] inputAsDecimalArray, double inputAsDecimal, List<char> targetNumeralSystem, int targetBase, int places)
+        public static string ConvertDecimalToTarget(char[] inputAsDecimalArray, double inputAsDecimal, List<char> targetNumeralSystem, int targetBase)
         {
             string targetResult = "";
             int decimalInteger;
+            if (inputAsDecimal == 0)
+            {
+                targetResult = "0";
+            }
             // if input does not contain a fractional part
-            if (!inputAsDecimalArray.Contains('.'))
+            else if (!inputAsDecimalArray.Contains('.'))
             {
                 // convert inputAsDecimal to int, calculate its new value in targetNumeralSystem, assign that value to targetResult
                 decimalInteger = Convert.ToInt32(inputAsDecimal);
@@ -171,6 +165,10 @@ namespace BaseXToBaseY
                 string fractionString = new string(newFractionArray);
 
                 // convert integerString and fractionString into a long and a double, respectively
+                if (newIntegerArray.Length == 0)
+                {
+                    integerString = "0";
+                }
                 decimalInteger = Convert.ToInt32(integerString);
                 double decimalFraction = Convert.ToDouble(fractionString);
 
@@ -178,7 +176,7 @@ namespace BaseXToBaseY
                 string integerResult = CalculateBaseXIntegerValue(targetBase, decimalInteger, targetNumeralSystem);
 
                 // calculate fractionInput value in the targetNumeralSystem, assign that value to fractionResult
-                string fractionResult = CalculateBaseXFractionValue(targetBase, decimalFraction, targetNumeralSystem, places);
+                string fractionResult = CalculateBaseXFractionValue(targetBase, decimalFraction, targetNumeralSystem);
 
                 // assign integerResult.fractionResult to targetResult
                 targetResult = integerResult + '.' + fractionResult;
@@ -244,22 +242,18 @@ namespace BaseXToBaseY
             return integerResult;
         }
 
-        private static string CalculateBaseXFractionValue(int targetBase, double fractionInput, List<char> targetNumeralSystem, int places)
+        private static string CalculateBaseXFractionValue(int targetBase, double fractionInput, List<char> targetNumeralSystem)
         {
             string fractionResult = "";
-            // throw exception if places is not positive
-            if (places < 0)
-            {
-                throw new InvalidPlacesException();
-            }
+            
             // convert targetBase to a double to use in multiplication
             double doubleBase = Convert.ToDouble(targetBase);
 
             // initialize loopCounter
             int loopCounter = 0;
 
-            // set while loop to terminate when fractionInput has been fully converted, or when # of places is reached
-            while (fractionInput > 0 && loopCounter < places)
+            // set while loop to terminate when fractionInput has been fully converted, or when max # of places is reached
+            while (fractionInput > 0 && loopCounter <= 324)
             {
                 // multiply fractionInput by targetBase, assign to double appendageCarry
                 double appendageCarry = fractionInput * targetBase;
@@ -303,6 +297,16 @@ namespace BaseXToBaseY
 
         public static string FormatConversionForDisplay(bool inputNegative, string input, string targetResult, int originBase, int targetBase)
         {
+            if (input[0] == '.')
+            {
+                input.Insert(0, "0");
+            }
+
+            if (targetResult[0] == '.')
+            {
+                targetResult.Insert(0, "0");
+            }
+
             //handle negatives
             if (inputNegative)
             {

@@ -136,6 +136,17 @@ namespace BaseXToBaseY
 
                         // display results
                         calculationLabel.Text = HelperMethods.FormatCalculationForDisplay(num1, num2, targetResult, num1Negative, num2Negative, resultNegative, operation, num1Base, num2Base, targetBase);
+
+                        // reset the board
+                        num1TextBox.Text = "";
+                        if (resultNegative)
+                        {
+                            num1TextBox.Text = "-";
+                        }
+                        num1TextBox.Text += targetResult;
+                        num1DropDownList.SelectedValue = targetDropDownList.SelectedValue;
+                        num2TextBox.Text = "";
+                        num2DropDownList.SelectedValue = targetDropDownList.SelectedValue;
                     }
                 }
             }

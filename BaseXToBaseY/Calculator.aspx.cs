@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using BaseXToBaseY.Exceptions;
+using BaseConverter.Domain;
 
 namespace BaseXToBaseY
 {
@@ -103,12 +104,12 @@ namespace BaseXToBaseY
                     char[] num2Array = num2.ToCharArray();
 
                     // validate user input
-                    if (HelperMethods.ValidateInput(num1Array, num1NumeralSystem, num1NumeralSystemName, num1, targetBase, num1Base)
-                        && HelperMethods.ValidateInput(num2Array, num2NumeralSystem, num2NumeralSystemName, num2, targetBase, num2Base))
+                    if (Validator.ValidateInput(num1Array, num1NumeralSystem, num1NumeralSystemName, num1, targetBase, num1Base)
+                        && Validator.ValidateInput(num2Array, num2NumeralSystem, num2NumeralSystemName, num2, targetBase, num2Base))
                     {
                         // convert input to decimal
-                        double num1AsDecimal = HelperMethods.ConvertInputToDecimal(num1Array, num1Base, masterNumeralSystem);
-                        double num2AsDecimal = HelperMethods.ConvertInputToDecimal(num2Array, num2Base, masterNumeralSystem);
+                        double num1AsDecimal = Converter.ConvertInputToDecimal(num1Array, num1Base, masterNumeralSystem);
+                        double num2AsDecimal = Converter.ConvertInputToDecimal(num2Array, num2Base, masterNumeralSystem);
 
                         // prepare inputAsDecimal for use, preventing scientific notation
                         string num1AsDecimalString = num1AsDecimal.ToString(Formatter.Notation);
@@ -117,7 +118,7 @@ namespace BaseXToBaseY
                         char[] num2AsDecimalArray = num2AsDecimalString.ToCharArray();
 
                         // do math in decimal
-                        double calculationResult = HelperMethods.Calculate(num1AsDecimal, num1Negative, num2AsDecimal, num2Negative, operation);
+                        double calculationResult = DecimalCalculator.Calculate(num1AsDecimal, num1Negative, num2AsDecimal, num2Negative, operation);
 
                         // handle negative
                         bool resultNegative = false;
@@ -132,10 +133,10 @@ namespace BaseXToBaseY
                         char[] calculationResultAsDecimalArray = calculationResultAsString.ToCharArray();
 
                         // convert math result to target base
-                        string targetResult = HelperMethods.ConvertDecimalToTarget(calculationResultAsDecimalArray, calculationResult, targetNumeralSystem, targetBase);
+                        string targetResult = Converter.ConvertDecimalToTarget(calculationResultAsDecimalArray, calculationResult, targetNumeralSystem, targetBase);
 
                         // display results
-                        calculationLabel.Text = HelperMethods.FormatCalculationForDisplay(num1, num2, targetResult, num1Negative, num2Negative, resultNegative, operation, num1Base, num2Base, targetBase);
+                        calculationLabel.Text = Formatter.FormatCalculationForDisplay(num1, num2, targetResult, num1Negative, num2Negative, resultNegative, operation, num1Base, num2Base, targetBase);
 
                         // reset the board
                         num1TextBox.Text = "";

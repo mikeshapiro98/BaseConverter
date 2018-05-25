@@ -1,46 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BaseXToBaseY.Exceptions;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BaseXToBaseY
+namespace BaseConverter.Domain
 {
-    public static class HelperMethods
+    public class Converter
     {
-
-        // prevent faulty user input
-        public static bool ValidateInput(char[] inputArray, List<char> originNumeralSystem, string originNumeralSystemName, string input, int targetBase, int originBase)
-        {
-            // initialize minus and period counters
-            var periodCounter = 0;
-            // track quantity of minuses and periods in input array
-            foreach (var digit in inputArray)
-            {
-                if (digit == '.')
-                {
-                    periodCounter++;
-                }
-                // ensure every char in input array exists in origin numeral system
-                else if (!originNumeralSystem.Contains(digit))
-                {
-                    throw new OriginNumeralSystemLacksCharacterException(originNumeralSystemName);
-                }
-            }
-            // throw exceptions if input contains multiple periods
-            if (periodCounter > 1)
-            {
-                throw new TooManyPeriodsException();
-            }
-            // unary lacks 0 and fractional numbers
-            if ((input.Contains('0') && targetBase == 1) 
-                || (input.Contains('.') && targetBase == 1))
-            {
-                throw new NoDogsOnTheMoonException();
-            }
-
-            return true;
-        }
-
         public static double ConvertInputToDecimal(char[] inputArray, int originBase, List<char> masterNumeralSystem)
         {
             double inputAsDecimal;
@@ -245,7 +212,7 @@ namespace BaseXToBaseY
         private static string CalculateBaseXFractionValue(int targetBase, double fractionInput, List<char> targetNumeralSystem)
         {
             string fractionResult = "";
-            
+
             // convert targetBase to a double to use in multiplication
             double doubleBase = Convert.ToDouble(targetBase);
 
@@ -293,108 +260,6 @@ namespace BaseXToBaseY
                 digitCharacter = targetNumeralSystem.ElementAt(dividend);
             }
             return digitCharacter;
-        }
-
-        public static string FormatConversionForDisplay(bool inputNegative, string input, string targetResult, int originBase, int targetBase)
-        {
-            if (input[0] == '.')
-            {
-                input.Insert(0, "0");
-            }
-
-            if (targetResult[0] == '.')
-            {
-                targetResult.Insert(0, "0");
-            }
-
-            //handle negatives
-            if (inputNegative)
-            {
-                input = input.Insert(0, "-");
-                targetResult = targetResult.Insert(0, "-");
-            }
-
-            // format results for display
-            string formattedResult = String.Format("{0}<sub>{1}</sub> = {2}<sub>{3}</sub>",
-                input,
-                originBase,
-                targetResult,
-                targetBase);
-
-            return formattedResult;
-        }
-
-        // add, subtract, multiply, or divide
-        internal static double Calculate(double decimalNum1, bool num1Negative, double decimalNum2, bool num2Negative, char operation)
-        {
-            if (num1Negative)
-            {
-                decimalNum1 = decimalNum1 * -1;
-            }
-            if (num2Negative)
-            {
-                decimalNum2 = decimalNum2 * -1;
-            }
-
-            double decimalTarget;
-            switch (operation)
-            {
-                case '+':
-                    decimalTarget = decimalNum1 + decimalNum2;
-                    break;
-                case '-':
-                    decimalTarget = decimalNum1 - decimalNum2;
-                    break;
-                case '*':
-                    decimalTarget = decimalNum1 * decimalNum2;
-                    break;
-                default:
-                    decimalTarget = decimalNum1 / decimalNum2;
-                    break;
-            }
-            return decimalTarget;
-        }
-
-        // display calculation
-        public static string FormatCalculationForDisplay(string num1, string num2, string targetResult, bool num1Negative, bool num2Negative, bool resultNegative, char operation, int num1Base, int num2Base, int targetBase)
-        {
-            if (num1[0] == '.')
-            {
-                num1.Insert(0, "0");
-            }
-            if (num2[0] == '.')
-            {
-                num2.Insert(0, "0");
-            }
-            if (targetResult[0] == '.')
-            {
-                targetResult.Insert(0, "0");
-            }
-
-            //handle negatives
-            if (num1Negative)
-            {
-                num1 = num1.Insert(0, "-");
-            }
-            if (num2Negative)
-            {
-                num2 = num2.Insert(0, "-");
-            }
-            if (resultNegative)
-            {
-                targetResult = targetResult.Insert(0, "-");
-            }
-
-            // format results for display
-            string result = String.Format("{0}<sub>{1}</sub> {2} {3}<sub>{4}</sub> = {5}<sub>{6}</sub>",
-                num1,
-                num1Base,
-                operation,
-                num2,
-                num2Base,
-                targetResult,
-                targetBase);
-            return result;
         }
     }
 }

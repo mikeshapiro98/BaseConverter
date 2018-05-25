@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseConverter", "BaseXToBaseY\BaseConverter.csproj", "{434CDA93-836C-43D4-96D0-38F8149384AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseConverter.Web", "BaseXToBaseY\BaseConverter.Web.csproj", "{434CDA93-836C-43D4-96D0-38F8149384AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseConverter.Domain", "BaseConverter.Domain\BaseConverter.Domain.csproj", "{9FB71F94-CB3C-474B-B495-070D27EB1ABB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{434CDA93-836C-43D4-96D0-38F8149384AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{434CDA93-836C-43D4-96D0-38F8149384AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{434CDA93-836C-43D4-96D0-38F8149384AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB71F94-CB3C-474B-B495-070D27EB1ABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB71F94-CB3C-474B-B495-070D27EB1ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB71F94-CB3C-474B-B495-070D27EB1ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB71F94-CB3C-474B-B495-070D27EB1ABB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

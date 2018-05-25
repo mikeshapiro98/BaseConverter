@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using BaseXToBaseY.Exceptions;
+using BaseConverter.Domain;
 
 namespace BaseXToBaseY
 {
@@ -65,20 +66,20 @@ namespace BaseXToBaseY
                     char[] inputArray = input.ToCharArray();
 
                     // validate user input
-                    if (HelperMethods.ValidateInput(inputArray, originNumeralSystem, originNumeralSystemName, input, targetBase, originBase))
+                    if (Validator.ValidateInput(inputArray, originNumeralSystem, originNumeralSystemName, input, targetBase, originBase))
                     {
                         // convert input to decimal
-                        double inputAsDecimal = HelperMethods.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem);
+                        double inputAsDecimal = Converter.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem);
 
                         // prepare inputAsDecimal for use, preventing scientific notation
                         string inputAsDecimalString = inputAsDecimal.ToString(Formatter.Notation);
                         char[] inputAsDecimalArray = inputAsDecimalString.ToCharArray();
 
                         // convert decimal to target base
-                        string targetResult = HelperMethods.ConvertDecimalToTarget(inputAsDecimalArray, inputAsDecimal, targetNumeralSystem, targetBase);
+                        string targetResult = Converter.ConvertDecimalToTarget(inputAsDecimalArray, inputAsDecimal, targetNumeralSystem, targetBase);
                         
                         // display results
-                        resultLabel.Text = HelperMethods.FormatConversionForDisplay(inputNegative, input, targetResult, originBase, targetBase);
+                        resultLabel.Text = Formatter.FormatConversionForDisplay(inputNegative, input, targetResult, originBase, targetBase);
                     }
                 }
             }

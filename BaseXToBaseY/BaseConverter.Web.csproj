@@ -88,17 +88,9 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Exceptions\IsNaNException.cs" />
-    <Compile Include="Exceptions\NegativeZeroException.cs" />
-    <Compile Include="Exceptions\NoDogsOnTheMoonException.cs" />
-    <Compile Include="Exceptions\NothingShallComeFromNothingException.cs" />
-    <Compile Include="Exceptions\OriginNumeralSystemLacksCharacterException.cs" />
-    <Compile Include="Exceptions\TooManyPeriodsException.cs" />
-    <Compile Include="Formatter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HelperMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +105,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseConverter.Domain\BaseConverter.Domain.csproj">
+      <Project>{9fb71f94-cb3c-474b-b495-070d27eb1abb}</Project>
+      <Name>BaseConverter.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

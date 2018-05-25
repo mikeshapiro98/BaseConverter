@@ -34,11 +34,11 @@ namespace BaseXToBaseY
                     // initialize master numeral system list, create origin and target numeral system lists from user selections
                     List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
 
-                    int originBase = Convert.ToInt32(originDropDownList.SelectedValue);
+                    int originBase = Convert.ToInt16(originDropDownList.SelectedValue);
                     List<char> originNumeralSystem = masterNumeralSystem.Take(originBase).ToList();
                     string originNumeralSystemName = originDropDownList.SelectedItem.Text;
 
-                    int targetBase = Convert.ToInt32(targetDropDownList.SelectedValue);
+                    int targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
                     List<char> targetNumeralSystem = masterNumeralSystem.Take(targetBase).ToList();
 
                     // prepare user input for use
@@ -86,23 +86,27 @@ namespace BaseXToBaseY
             // exception handling
             catch (NothingShallComeFromNothingException)
             {
-                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please fill out all required fields?</span>";
+                resultLabel.Text = "<span style='color:#B33A3A;'>Please fill out all required fields</span>";
             }
             catch (IsNaNException)
             {
-                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please enter a valid number?</span>";
+                resultLabel.Text = "<span style='color:#B33A3A;'>Please enter a valid number</span>";
             }
             catch (OriginNumeralSystemLacksCharacterException ex)
             {
-                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please only enter characters that exist in the " + ex.NumeralSystemName + " number system?</span>";
+                resultLabel.Text = "<span style='color:#B33A3A;'>Please only enter characters that exist in the " + ex.NumeralSystemName + " numeral system</span>";
             }
             catch (TooManyPeriodsException)
             {
-                resultLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple periods?</span>";
+                resultLabel.Text = "<span style='color:#B33A3A;'>Please do not enter multiple periods</span>";
             }
             catch (NoDogsOnTheMoonException)
             {
-                resultLabel.Text = "<span style='color:#B33A3A;'>There is no 0 and no fractional values in the Base 1 (Unary) system.</span>";
+                resultLabel.Text = "<span style='color:#B33A3A;'>The Base 1 (Unary) numeral system lacks fractions and the digit 0</span>";
+            }
+            catch (OverflowException)
+            {
+                resultLabel.Text = "<span style='color:#B33A3A;'>Input exceeds the maximum value of the C# long data type and cannot be processed</span>";
             }
             catch (Exception ex)
             {

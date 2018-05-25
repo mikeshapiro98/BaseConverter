@@ -108,7 +108,7 @@ namespace BaseConverter.Domain
         public static string ConvertDecimalToTarget(char[] inputAsDecimalArray, double inputAsDecimal, List<char> targetNumeralSystem, int targetBase)
         {
             string targetResult = "";
-            int decimalInteger;
+            long decimalInteger;
             if (inputAsDecimal == 0)
             {
                 targetResult = "0";
@@ -117,7 +117,7 @@ namespace BaseConverter.Domain
             else if (!inputAsDecimalArray.Contains('.'))
             {
                 // convert inputAsDecimal to int, calculate its new value in targetNumeralSystem, assign that value to targetResult
-                decimalInteger = Convert.ToInt32(inputAsDecimal);
+                decimalInteger = Convert.ToInt64(inputAsDecimal);
                 targetResult = CalculateBaseXIntegerValue(targetBase, decimalInteger, targetNumeralSystem);
             }
             // if input contains a fractional part
@@ -136,7 +136,7 @@ namespace BaseConverter.Domain
                 {
                     integerString = "0";
                 }
-                decimalInteger = Convert.ToInt32(integerString);
+                decimalInteger = Convert.ToInt64(integerString);
                 double decimalFraction = Convert.ToDouble(fractionString);
 
                 //  calculate decimalInteger value in the targetNumeralSystem, assign that value to integerResult
@@ -151,7 +151,7 @@ namespace BaseConverter.Domain
             return targetResult;
         }
 
-        private static string CalculateBaseXIntegerValue(int targetBase, int decimalInteger, List<char> targetNumeralSystem)
+        private static string CalculateBaseXIntegerValue(int targetBase, long decimalInteger, List<char> targetNumeralSystem)
         {
             string integerResult = "";
             // edge case: if targetBase is unary
@@ -159,7 +159,7 @@ namespace BaseConverter.Domain
             {
                 for (int i = 0; i < decimalInteger; i++)
                 {
-                    // append a number of tally marks equal to longInput to resultLabel
+                    // append a number of tally marks equal to decimalInteger to resultLabel
                     integerResult += '1';
                 }
             }
@@ -186,7 +186,7 @@ namespace BaseConverter.Domain
                     if (decimalInteger >= placeValue)
                     {
                         // calculate dividend
-                        int dividend = decimalInteger / Convert.ToInt32(placeValue);
+                        long dividend = decimalInteger / Convert.ToInt64(placeValue);
 
                         // determine digit equal to dividend in targetNumeralSystem
                         char digit = DetermineDigit(dividend, targetNumeralSystem);
@@ -195,7 +195,7 @@ namespace BaseConverter.Domain
                         integerResult += digit.ToString();
 
                         // subtract placeValue from intInput
-                        decimalInteger -= (Convert.ToInt32(placeValue) * dividend);
+                        decimalInteger -= (Convert.ToInt64(placeValue) * dividend);
                     }
                     else
                     {
@@ -225,8 +225,8 @@ namespace BaseConverter.Domain
                 // multiply fractionInput by targetBase, assign to double appendageCarry
                 double appendageCarry = fractionInput * targetBase;
 
-                // assign integer part of appendageCarry to int appendage
-                int appendage = Convert.ToInt32(Math.Floor(appendageCarry));
+                // assign integer part of appendageCarry to long appendage
+                long appendage = Convert.ToInt64(Math.Floor(appendageCarry));
 
                 // determine digit equal to appendage in targetNumeralSystem
                 char digit = DetermineDigit(appendage, targetNumeralSystem);
@@ -244,7 +244,7 @@ namespace BaseConverter.Domain
         }
 
         // calculate the digit character of a given decimal value
-        private static char DetermineDigit(int dividend, List<char> targetNumeralSystem)
+        private static char DetermineDigit(long dividend, List<char> targetNumeralSystem)
         {
             char digitCharacter;
             if (dividend == 1)
@@ -257,7 +257,7 @@ namespace BaseConverter.Domain
             }
             else
             {
-                digitCharacter = targetNumeralSystem.ElementAt(dividend);
+                digitCharacter = targetNumeralSystem.ElementAt(Convert.ToInt32(dividend));
             }
             return digitCharacter;
         }

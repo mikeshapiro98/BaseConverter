@@ -7,16 +7,17 @@ using BaseConverter.Domain;
 
 namespace BaseXToBaseY
 {
-	public partial class Calculator : System.Web.UI.Page
-	{
-		protected void Page_Load(object sender, EventArgs e)
-		{
+    public partial class Calculator : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
 
-		}
+        }
 
         protected void equalsButton_Click(object sender, EventArgs e)
         {
-            try { 
+            try
+            {
                 if (num1TextBox.Text.Trim(' ').Length == 0 || num2TextBox.Text.Trim(' ').Length == 0)
                 {
                     throw new NothingShallComeFromNothingException();
@@ -33,15 +34,15 @@ namespace BaseXToBaseY
                     // initialize master numeral system list, create num1, num2, and target numeral system lists from user selections
                     List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
 
-                    int num1Base = Convert.ToInt32(num1DropDownList.SelectedValue);
+                    int num1Base = Convert.ToInt16(num1DropDownList.SelectedValue);
                     List<char> num1NumeralSystem = masterNumeralSystem.Take(num1Base).ToList();
                     string num1NumeralSystemName = num1DropDownList.SelectedItem.Text;
 
-                    int num2Base = Convert.ToInt32(num2DropDownList.SelectedValue);
+                    int num2Base = Convert.ToInt16(num2DropDownList.SelectedValue);
                     List<char> num2NumeralSystem = masterNumeralSystem.Take(num2Base).ToList();
                     string num2NumeralSystemName = num2DropDownList.SelectedItem.Text;
 
-                    int targetBase = Convert.ToInt32(targetDropDownList.SelectedValue);
+                    int targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
                     List<char> targetNumeralSystem = masterNumeralSystem.Take(targetBase).ToList();
 
                     // prepare user inputs for use
@@ -154,23 +155,27 @@ namespace BaseXToBaseY
             // exception handling
             catch (NothingShallComeFromNothingException)
             {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please fill out all required fields?</span>";
+                calculationLabel.Text = "<span style='color:#B33A3A;'>Please fill out all required fields</span>";
             }
             catch (IsNaNException)
             {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please enter a valid number?</span>";
+                calculationLabel.Text = "<span style='color:#B33A3A;'>Please enter a valid number</span>";
             }
             catch (OriginNumeralSystemLacksCharacterException ex)
             {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please only enter characters that exist in the " + ex.NumeralSystemName + " number system?</span>";
+                calculationLabel.Text = "<span style='color:#B33A3A;'>Please only enter characters that exist in the " + ex.NumeralSystemName + " numeral system</span>";
             }
             catch (TooManyPeriodsException)
             {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>Would you please not enter multiple periods?</span>";
+                calculationLabel.Text = "<span style='color:#B33A3A;'>Please do not enter multiple periods</span>";
             }
             catch (NoDogsOnTheMoonException)
             {
-                calculationLabel.Text = "<span style='color:#B33A3A;'>There is no 0 and no fractional values in the Base 1 (Unary) system.</span>";
+                calculationLabel.Text = "<span style='color:#B33A3A;'>The Base 1 (Unary) numeral system lacks fractions and the digit 0</span>";
+            }
+            catch (OverflowException)
+            {
+                calculationLabel.Text = "<span style='color:#B33A3A;'>Input exceeds the maximum value of the C# long data type and cannot be processed</span>";
             }
             catch (Exception ex)
             {

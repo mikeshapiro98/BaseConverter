@@ -231,6 +231,7 @@
             <br />
             <br />
             <asp:Label ID="resultLabel" runat="server"></asp:Label>
+            <p>*Results precise up to 324 fractional digits.</p>
             <br />
             <br />
             <asp:Table ID="keyTable" runat="server" BorderColor="Black" BorderStyle="Solid" Caption="&lt;strong&gt;Character Key&lt;/strong&gt;" GridLines="Both" HorizontalAlign="Left">

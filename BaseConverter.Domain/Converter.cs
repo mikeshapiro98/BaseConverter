@@ -8,28 +8,28 @@ namespace BaseConverter.Domain
 {
     public class Converter
     {
-        public static double ConvertInputToDecimal(char[] inputArray, int originBase, List<char> masterNumeralSystem)
+        public static double ConvertInputToDecimal(Number number, List<char> masterNumeralSystem)
         {
             double inputAsDecimal;
             // if input contains no fractional part
-            if (!inputArray.Contains('.'))
+            if (!number.inputArray.Contains('.'))
             {
                 // assign decimal value of integer to result
-                inputAsDecimal = CalculateDecimalValueOfInteger(inputArray, originBase, masterNumeralSystem);
+                inputAsDecimal = CalculateDecimalValueOfInteger(number.inputArray, number.originBase, masterNumeralSystem);
             }
             // if input contains a fractional part
             else
             {
                 // split array on the period
-                char[] integerArray = inputArray.TakeWhile(x => x != '.').ToArray();
-                char[] fractionArray = inputArray.SkipWhile(x => x != '.').ToArray();
+                char[] integerArray = number.inputArray.TakeWhile(x => x != '.').ToArray();
+                char[] fractionArray = number.inputArray.SkipWhile(x => x != '.').ToArray();
                 fractionArray = fractionArray.Skip(1).ToArray();
 
                 // assign decimal value of integer part to result
-                inputAsDecimal = CalculateDecimalValueOfInteger(integerArray, originBase, masterNumeralSystem);
+                inputAsDecimal = CalculateDecimalValueOfInteger(integerArray, number.originBase, masterNumeralSystem);
 
                 // assign decimal value of integer part + fractional part to result
-                double fraction = CalculateDecimalValueOfFraction(fractionArray, originBase, masterNumeralSystem);
+                double fraction = CalculateDecimalValueOfFraction(fractionArray, number.originBase, masterNumeralSystem);
                 inputAsDecimal += fraction;
             }
             // return decimal value of input
@@ -105,27 +105,27 @@ namespace BaseConverter.Domain
             return placeValue;
         }
 
-        public static string ConvertDecimalToTarget(char[] inputAsDecimalArray, double inputAsDecimal, List<char> targetNumeralSystem, int targetBase)
+        public static string ConvertDecimalToTarget(Number number)
         {
             string targetResult = "";
             long decimalInteger;
-            if (inputAsDecimal == 0)
+            if (number.inputAsDecimal == 0)
             {
                 targetResult = "0";
             }
             // if input does not contain a fractional part
-            else if (!inputAsDecimalArray.Contains('.'))
+            else if (!number.inputAsDecimalArray.Contains('.'))
             {
                 // convert inputAsDecimal to int, calculate its new value in targetNumeralSystem, assign that value to targetResult
-                decimalInteger = Convert.ToInt64(inputAsDecimal);
-                targetResult = CalculateBaseXIntegerValue(targetBase, decimalInteger, targetNumeralSystem);
+                decimalInteger = Convert.ToInt64(number.inputAsDecimal);
+                targetResult = CalculateBaseXIntegerValue(number.targetBase, decimalInteger, number.targetNumeralSystem);
             }
             // if input contains a fractional part
             else
             {
                 // split decimalInputArray on the period into integerArray and fractionArray
-                char[] newIntegerArray = inputAsDecimalArray.TakeWhile(x => x != '.').ToArray();
-                char[] newFractionArray = inputAsDecimalArray.SkipWhile(x => x != '.').ToArray();
+                char[] newIntegerArray = number.inputAsDecimalArray.TakeWhile(x => x != '.').ToArray();
+                char[] newFractionArray = number.inputAsDecimalArray.SkipWhile(x => x != '.').ToArray();
 
                 // convert integerArray and fractionArray into strings
                 string integerString = new string(newIntegerArray);
@@ -140,10 +140,10 @@ namespace BaseConverter.Domain
                 double decimalFraction = Convert.ToDouble(fractionString);
 
                 //  calculate decimalInteger value in the targetNumeralSystem, assign that value to integerResult
-                string integerResult = CalculateBaseXIntegerValue(targetBase, decimalInteger, targetNumeralSystem);
+                string integerResult = CalculateBaseXIntegerValue(number.targetBase, decimalInteger, number.targetNumeralSystem);
 
                 // calculate fractionInput value in the targetNumeralSystem, assign that value to fractionResult
-                string fractionResult = CalculateBaseXFractionValue(targetBase, decimalFraction, targetNumeralSystem);
+                string fractionResult = CalculateBaseXFractionValue(number.targetBase, decimalFraction, number.targetNumeralSystem);
 
                 // assign integerResult.fractionResult to targetResult
                 targetResult = integerResult + '.' + fractionResult;

@@ -9,31 +9,31 @@ namespace BaseConverter.Domain
     public class DecimalCalculator
     {
         // add, subtract, multiply, or divide
-        public static double Calculate(double decimalNum1, bool num1Negative, double decimalNum2, bool num2Negative, char operation)
+        public static double Calculate(Number number1, Number number2, char operation)
         {
-            if (num1Negative)
+            if (number1.inputNegative)
             {
-                decimalNum1 = decimalNum1 * -1;
+                number1.inputAsDecimal = number1.inputAsDecimal * -1;
             }
-            if (num2Negative)
+            if (number2.inputNegative)
             {
-                decimalNum2 = decimalNum2 * -1;
+                number2.inputAsDecimal = number2.inputAsDecimal * -1;
             }
 
             double decimalTarget;
             switch (operation)
             {
                 case '+':
-                    decimalTarget = decimalNum1 + decimalNum2;
+                    decimalTarget = number1.inputAsDecimal + number2.inputAsDecimal;
                     break;
                 case '-':
-                    decimalTarget = decimalNum1 - decimalNum2;
+                    decimalTarget = number1.inputAsDecimal - number2.inputAsDecimal;
                     break;
                 case '*':
-                    decimalTarget = decimalNum1 * decimalNum2;
+                    decimalTarget = number1.inputAsDecimal * number2.inputAsDecimal;
                     break;
                 default:
-                    decimalTarget = decimalNum1 / decimalNum2;
+                    decimalTarget = number1.inputAsDecimal / number2.inputAsDecimal;
                     break;
             }
             return decimalTarget;

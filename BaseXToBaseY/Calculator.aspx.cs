@@ -31,23 +31,30 @@ namespace BaseXToBaseY
                     // clear calculationLabel
                     calculationLabel.Text = "";
 
+                    // instantiate three Number objects
+                    Number number1 = new Number();
+                    Number number2 = new Number();
+                    Number targetNumber = new Number();
+
                     // initialize master numeral system list, create num1, num2, and target numeral system lists from user selections
                     List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
 
-                    int num1Base = Convert.ToInt16(num1DropDownList.SelectedValue);
-                    List<char> num1NumeralSystem = masterNumeralSystem.Take(num1Base).ToList();
-                    string num1NumeralSystemName = num1DropDownList.SelectedItem.Text;
+                    number1.originBase = Convert.ToInt16(num1DropDownList.SelectedValue);
+                    number1.originNumeralSystem = masterNumeralSystem.Take(number1.originBase).ToList();
+                    number1.originNumeralSystemName = num1DropDownList.SelectedItem.Text;
 
-                    int num2Base = Convert.ToInt16(num2DropDownList.SelectedValue);
-                    List<char> num2NumeralSystem = masterNumeralSystem.Take(num2Base).ToList();
-                    string num2NumeralSystemName = num2DropDownList.SelectedItem.Text;
+                    number2.originBase = Convert.ToInt16(num2DropDownList.SelectedValue);
+                    number2.originNumeralSystem = masterNumeralSystem.Take(number2.originBase).ToList();
+                    number2.originNumeralSystemName = num2DropDownList.SelectedItem.Text;
 
-                    int targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
-                    List<char> targetNumeralSystem = masterNumeralSystem.Take(targetBase).ToList();
+                    targetNumber.originBase = 10;
+                    targetNumber.originNumeralSystem = masterNumeralSystem.Take(10).ToList();
+                    targetNumber.targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
+                    targetNumber.targetNumeralSystem = masterNumeralSystem.Take(targetNumber.targetBase).ToList();
 
                     // prepare user inputs for use
-                    string num1 = num1TextBox.Text;
-                    string num2 = num2TextBox.Text;
+                    number1.input = num1TextBox.Text;
+                    number2.input = num2TextBox.Text;
 
                     char operation;
                     if (additionRadioButton.Checked)
@@ -67,85 +74,86 @@ namespace BaseXToBaseY
                         operation = '/';
                     }
 
-                    bool num1Negative = false;
-                    bool num2Negative = false;
-                    if (num1[0] == '-')
+                    number1.inputNegative = false;
+                    number2.inputNegative = false;
+                    if (number1.input[0] == '-')
                     {
-                        num1 = num1.TrimStart('-');
-                        num1Negative = true;
+                        number1.input = number1.input.TrimStart('-');
+                        number1.inputNegative = true;
                     }
-                    if (num2[0] == '-')
+                    if (number2.input[0] == '-')
                     {
-                        num2 = num2.TrimStart('-');
-                        num2Negative = true;
-                    }
-
-                    num1 = num1.TrimStart(' ', '0');
-                    num2 = num2.TrimStart(' ', '0');
-
-                    if (num1.Contains('.'))
-                    {
-                        num1 = num1.TrimEnd('0');
-                    }
-                    if (num2.Contains('.'))
-                    {
-                        num2 = num2.TrimEnd('0');
+                        number2.input = number2.input.TrimStart('-');
+                        number2.inputNegative = true;
                     }
 
-                    if (num1 == "." || num1.Length == 0)
+                    number1.input = number1.input.TrimStart(' ', '0');
+                    number2.input = number2.input.TrimStart(' ', '0');
+
+                    if (number1.input.Contains('.'))
                     {
-                        num1 = "0";
+                        number1.input = number1.input.TrimEnd('0');
                     }
-                    if (num2 == "." || num2.Length == 0)
+                    if (number2.input.Contains('.'))
                     {
-                        num2 = "0";
+                        number2.input = number2.input.TrimEnd('0');
                     }
 
-                    char[] num1Array = num1.ToCharArray();
-                    char[] num2Array = num2.ToCharArray();
+                    if (number1.input == "." || number1.input.Length == 0)
+                    {
+                        number1.input = "0";
+                    }
+                    if (number2.input == "." || number2.input.Length == 0)
+                    {
+                        number2.input = "0";
+                    }
+
+                    number1.inputArray = number1.input.ToCharArray();
+                    number2.inputArray = number2.input.ToCharArray();
 
                     // validate user input
-                    if (Validator.ValidateInput(num1Array, num1NumeralSystem, num1NumeralSystemName, num1, targetBase, num1Base)
-                        && Validator.ValidateInput(num2Array, num2NumeralSystem, num2NumeralSystemName, num2, targetBase, num2Base))
+                    if (Validator.ValidateInput(number1)
+                        && Validator.ValidateInput(number2))
                     {
                         // convert input to decimal
-                        double num1AsDecimal = Converter.ConvertInputToDecimal(num1Array, num1Base, masterNumeralSystem);
-                        double num2AsDecimal = Converter.ConvertInputToDecimal(num2Array, num2Base, masterNumeralSystem);
+                        number1.inputAsDecimal = Converter.ConvertInputToDecimal(number1, masterNumeralSystem);
+                        number2.inputAsDecimal = Converter.ConvertInputToDecimal(number2, masterNumeralSystem);
 
                         // prepare inputAsDecimal for use, preventing scientific notation
-                        string num1AsDecimalString = num1AsDecimal.ToString(Formatter.Notation);
-                        char[] num1AsDecimalArray = num1AsDecimalString.ToCharArray();
-                        string num2AsDecimalString = num2AsDecimal.ToString(Formatter.Notation);
-                        char[] num2AsDecimalArray = num2AsDecimalString.ToCharArray();
+                        number1.inputAsDecimalString = number1.inputAsDecimal.ToString(Formatter.Notation);
+                        number1.inputAsDecimalArray = number1.inputAsDecimalString.ToCharArray();
+
+                        number2.inputAsDecimalString = number2.inputAsDecimal.ToString(Formatter.Notation);
+                        number2.inputAsDecimalArray = number2.inputAsDecimalString.ToCharArray();
 
                         // do math in decimal
-                        double calculationResult = DecimalCalculator.Calculate(num1AsDecimal, num1Negative, num2AsDecimal, num2Negative, operation);
+                        targetNumber.inputAsDecimal = DecimalCalculator.Calculate(number1, number2, operation);
 
                         // handle negative
-                        bool resultNegative = false;
-                        if (calculationResult < 0)
+                        targetNumber.inputNegative = false;
+                        if (targetNumber.inputAsDecimal < 0)
                         {
-                            resultNegative = true;
-                            calculationResult = calculationResult * -1;
+                            targetNumber.inputNegative = true;
+                            targetNumber.inputAsDecimal = targetNumber.inputAsDecimal * -1;
                         }
 
                         // prep calculationResult for use
-                        string calculationResultAsString = calculationResult.ToString(Formatter.Notation);
-                        char[] calculationResultAsDecimalArray = calculationResultAsString.ToCharArray();
+                        targetNumber.inputAsDecimalString = targetNumber.inputAsDecimal.ToString(Formatter.Notation);
+                        targetNumber.inputAsDecimalArray = targetNumber.inputAsDecimalString.ToCharArray();
 
                         // convert math result to target base
-                        string targetResult = Converter.ConvertDecimalToTarget(calculationResultAsDecimalArray, calculationResult, targetNumeralSystem, targetBase);
+                        targetNumber.targetResult = Converter.ConvertDecimalToTarget(targetNumber);
 
                         // display results
-                        calculationLabel.Text = Formatter.FormatCalculationForDisplay(num1, num2, targetResult, num1Negative, num2Negative, resultNegative, operation, num1Base, num2Base, targetBase);
+                        calculationLabel.Text = Formatter.FormatCalculationForDisplay(number1, number2, targetNumber, operation);
 
                         // reset the board
                         num1TextBox.Text = "";
-                        if (resultNegative)
+                        if (targetNumber.inputNegative)
                         {
                             num1TextBox.Text = "-";
                         }
-                        num1TextBox.Text += targetResult;
+                        num1TextBox.Text += targetNumber.targetResult;
                         num1DropDownList.SelectedValue = targetDropDownList.SelectedValue;
                         num2TextBox.Text = "";
                         num2DropDownList.SelectedValue = targetDropDownList.SelectedValue;

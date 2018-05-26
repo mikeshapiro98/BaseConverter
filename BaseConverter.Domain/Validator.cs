@@ -10,21 +10,21 @@ namespace BaseConverter.Domain
     public class Validator
     {
         // prevent faulty user input
-        public static bool ValidateInput(char[] inputArray, List<char> originNumeralSystem, string originNumeralSystemName, string input, int targetBase, int originBase)
+        public static bool ValidateInput(Number number)
         {
             // initialize minus and period counters
             var periodCounter = 0;
             // track quantity of minuses and periods in input array
-            foreach (var digit in inputArray)
+            foreach (var digit in number.inputArray)
             {
                 if (digit == '.')
                 {
                     periodCounter++;
                 }
                 // ensure every char in input array exists in origin numeral system
-                else if (!originNumeralSystem.Contains(digit))
+                else if (!number.originNumeralSystem.Contains(digit))
                 {
-                    throw new OriginNumeralSystemLacksCharacterException(originNumeralSystemName);
+                    throw new OriginNumeralSystemLacksCharacterException(number.originNumeralSystemName);
                 }
             }
             // throw exceptions if input contains multiple periods
@@ -33,8 +33,8 @@ namespace BaseConverter.Domain
                 throw new TooManyPeriodsException();
             }
             // unary lacks 0 and fractional numbers
-            if ((input.Contains('0') && targetBase == 1)
-                || (input.Contains('.') && targetBase == 1))
+            if ((number.input.Contains('0') && number.targetBase == 1)
+                || (number.input.Contains('.') && number.targetBase == 1))
             {
                 throw new NoDogsOnTheMoonException();
             }

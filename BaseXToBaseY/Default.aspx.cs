@@ -31,55 +31,58 @@ namespace BaseXToBaseY
                     // clear resultLabel
                     resultLabel.Text = "";
 
+                    // instantiate a new Number object
+                    Number number = new Number();
+
                     // initialize master numeral system list, create origin and target numeral system lists from user selections
                     List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
 
-                    int originBase = Convert.ToInt16(originDropDownList.SelectedValue);
-                    List<char> originNumeralSystem = masterNumeralSystem.Take(originBase).ToList();
-                    string originNumeralSystemName = originDropDownList.SelectedItem.Text;
+                    number.originBase = Convert.ToInt16(originDropDownList.SelectedValue);
+                    number.originNumeralSystem = masterNumeralSystem.Take(number.originBase).ToList();
+                    number.originNumeralSystemName = originDropDownList.SelectedItem.Text;
 
-                    int targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
-                    List<char> targetNumeralSystem = masterNumeralSystem.Take(targetBase).ToList();
+                    number.targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
+                    number.targetNumeralSystem = masterNumeralSystem.Take(number.targetBase).ToList();
 
                     // prepare user input for use
-                    string input = inputTextBox.Text;
-                    
-                    bool inputNegative = false;
-                    if (input[0] == '-')
+                    number.input = inputTextBox.Text;
+
+                    number.inputNegative = false;
+                    if (number.input[0] == '-')
                     {
-                        input = input.TrimStart('-');
-                        inputNegative = true;
+                        number.input = number.input.TrimStart('-');
+                        number.inputNegative = true;
                     }
 
-                    input = input.TrimStart(' ','0');
+                    number.input = number.input.TrimStart(' ','0');
 
-                    if (input.Contains('.'))
+                    if (number.input.Contains('.'))
                     {
-                        input = input.TrimEnd('0');
+                        number.input = number.input.TrimEnd('0');
                     }
 
-                    if (input == "." || input.Length == 0)
+                    if (number.input == "." || number.input.Length == 0)
                     {
-                        input = "0";
+                        number.input = "0";
                     }
-                    
-                    char[] inputArray = input.ToCharArray();
+
+                    number.inputArray = number.input.ToCharArray();
 
                     // validate user input
-                    if (Validator.ValidateInput(inputArray, originNumeralSystem, originNumeralSystemName, input, targetBase, originBase))
+                    if (Validator.ValidateInput(number))
                     {
                         // convert input to decimal
-                        double inputAsDecimal = Converter.ConvertInputToDecimal(inputArray, originBase, masterNumeralSystem);
+                        number.inputAsDecimal = Converter.ConvertInputToDecimal(number, masterNumeralSystem);
 
                         // prepare inputAsDecimal for use, preventing scientific notation
-                        string inputAsDecimalString = inputAsDecimal.ToString(Formatter.Notation);
-                        char[] inputAsDecimalArray = inputAsDecimalString.ToCharArray();
+                        number.inputAsDecimalString = number.inputAsDecimal.ToString(Formatter.Notation);
+                        number.inputAsDecimalArray = number.inputAsDecimalString.ToCharArray();
 
                         // convert decimal to target base
-                        string targetResult = Converter.ConvertDecimalToTarget(inputAsDecimalArray, inputAsDecimal, targetNumeralSystem, targetBase);
+                        number.targetResult = Converter.ConvertDecimalToTarget(number);
                         
                         // display results
-                        resultLabel.Text = Formatter.FormatConversionForDisplay(inputNegative, input, targetResult, originBase, targetBase);
+                        resultLabel.Text = Formatter.FormatConversionForDisplay(number);
                     }
                 }
             }

@@ -10,74 +10,74 @@ namespace BaseConverter.Domain
     {
         public const string Notation = ".####################################################################################################################################################################################################################################################################################################################################";
 
-        public static string FormatConversionForDisplay(bool inputNegative, string input, string targetResult, int originBase, int targetBase)
+        public static string FormatConversionForDisplay(Number number)
         {
-            if (input[0] == '.')
+            if (number.input[0] == '.')
             {
-                input.Insert(0, "0");
+                number.input.Insert(0, "0");
             }
 
-            if (targetResult[0] == '.')
+            if (number.targetResult[0] == '.')
             {
-                targetResult.Insert(0, "0");
+                number.targetResult.Insert(0, "0");
             }
 
             //handle negatives
-            if (inputNegative)
+            if (number.inputNegative)
             {
-                input = input.Insert(0, "-");
-                targetResult = targetResult.Insert(0, "-");
+                number.input = number.input.Insert(0, "-");
+                number.targetResult = number.targetResult.Insert(0, "-");
             }
 
             // format results for display
             string formattedResult = String.Format("{0}<sub>{1}</sub> = {2}<sub>{3}</sub>",
-                input,
-                originBase,
-                targetResult,
-                targetBase);
+                number.input,
+                number.originBase,
+                number.targetResult,
+                number.targetBase);
 
             return formattedResult;
         }
 
         // display calculation
-        public static string FormatCalculationForDisplay(string num1, string num2, string targetResult, bool num1Negative, bool num2Negative, bool resultNegative, char operation, int num1Base, int num2Base, int targetBase)
+        public static string FormatCalculationForDisplay(Number number1, Number number2, Number targetNumber, char operation)
         {
-            if (num1[0] == '.')
+            if (number1.input[0] == '.')
             {
-                num1.Insert(0, "0");
+                number1.input.Insert(0, "0");
             }
-            if (num2[0] == '.')
+            if (number2.input[0] == '.')
             {
-                num2.Insert(0, "0");
+                number2.input.Insert(0, "0");
             }
-            if (targetResult[0] == '.')
+            if (targetNumber.targetResult[0] == '.')
             {
-                targetResult.Insert(0, "0");
+                targetNumber.targetResult.Insert(0, "0");
             }
 
             //handle negatives
-            if (num1Negative)
+            if (number1.inputNegative)
             {
-                num1 = num1.Insert(0, "-");
+                number1.input = number1.input.Insert(0, "-");
             }
-            if (num2Negative)
+            if (number2.inputNegative)
             {
-                num2 = num2.Insert(0, "-");
+                number2.input = number2.input.Insert(0, "-");
             }
-            if (resultNegative)
+            if (targetNumber.inputNegative)
             {
-                targetResult = targetResult.Insert(0, "-");
+                targetNumber.targetResult = targetNumber.targetResult.Insert(0, "-");
             }
 
             // format results for display
             string result = String.Format("{0}<sub>{1}</sub> {2} {3}<sub>{4}</sub> = {5}<sub>{6}</sub>",
-                num1,
-                num1Base,
+                number1.input,
+                number1.originBase,
                 operation,
-                num2,
-                num2Base,
-                targetResult,
-                targetBase);
+                number2.input,
+                number2.originBase,
+                targetNumber.targetResult,
+                targetNumber.targetBase);
             return result;
         }
     }

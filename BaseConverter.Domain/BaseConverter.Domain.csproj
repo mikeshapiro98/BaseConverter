@@ -49,6 +49,7 @@
     <Compile Include="Exceptions\OriginNumeralSystemLacksCharacterException.cs" />
     <Compile Include="Exceptions\TooManyPeriodsException.cs" />
     <Compile Include="Formatter.cs" />
+    <Compile Include="Number.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>

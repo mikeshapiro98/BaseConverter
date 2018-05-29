@@ -34,15 +34,13 @@ namespace BaseXToBaseY
                     // instantiate a new Number object
                     Number number = new Number();
 
-                    // initialize master numeral system list, create origin and target numeral system lists from user selections
-                    List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
-
+                    // create origin and target numeral system lists from user selections
                     number.originBase = Convert.ToInt16(originDropDownList.SelectedValue);
-                    number.originNumeralSystem = masterNumeralSystem.Take(number.originBase).ToList();
+                    number.originNumeralSystem = Number.MasterNumeralSystem.Take(number.originBase).ToList();
                     number.originNumeralSystemName = originDropDownList.SelectedItem.Text;
 
                     number.targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
-                    number.targetNumeralSystem = masterNumeralSystem.Take(number.targetBase).ToList();
+                    number.targetNumeralSystem = Number.MasterNumeralSystem.Take(number.targetBase).ToList();
 
                     // prepare user input for use
                     number.input = inputTextBox.Text;
@@ -71,16 +69,23 @@ namespace BaseXToBaseY
                     // validate user input
                     if (Validator.ValidateInput(number))
                     {
-                        // convert input to decimal
-                        number.inputAsDecimal = Converter.ConvertInputToDecimal(number, masterNumeralSystem);
+                        // avoid rounding embarrassment
+                        if (number.originBase == number.targetBase)
+                        {
+                            number.targetResult = number.input;
+                        }
+                        else
+                        {
+                            // convert input to decimal
+                            number.inputAsDecimal = Converter.ConvertInputToDecimal(number, Number.MasterNumeralSystem);
 
-                        // prepare inputAsDecimal for use, preventing scientific notation
-                        number.inputAsDecimalString = number.inputAsDecimal.ToString(Formatter.Notation);
-                        number.inputAsDecimalArray = number.inputAsDecimalString.ToCharArray();
+                            // prepare inputAsDecimal for use, preventing scientific notation
+                            number.inputAsDecimalString = number.inputAsDecimal.ToString(Formatter.Notation);
+                            number.inputAsDecimalArray = number.inputAsDecimalString.ToCharArray();
 
-                        // convert decimal to target base
-                        number.targetResult = Converter.ConvertDecimalToTarget(number);
-                        
+                            // convert decimal to target base
+                            number.targetResult = Converter.ConvertDecimalToTarget(number);
+                        }
                         // display results
                         resultLabel.Text = Formatter.FormatConversionForDisplay(number);
                     }

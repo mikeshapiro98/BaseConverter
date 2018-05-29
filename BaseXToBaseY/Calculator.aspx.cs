@@ -36,21 +36,21 @@ namespace BaseXToBaseY
                     Number number2 = new Number();
                     Number targetNumber = new Number();
 
-                    // initialize master numeral system list, create num1, num2, and target numeral system lists from user selections
-                    List<char> masterNumeralSystem = new List<char>() { '1', '0', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '/', ':', ';', '(', ')', '$', '&', '@', '"', ',', '?', '!', '\'', '[', ']', '{', '}', '#', '%', '^', '*', '+', '=', '_', '\\', '|', '~', '<', '>', '€', '£', '¥', '•', '₽', '¢', '₩', '§', '¿', '¡', 'ß' };
+                    // create num1, num2, and target numeral system lists from user selections
+                    
 
                     number1.originBase = Convert.ToInt16(num1DropDownList.SelectedValue);
-                    number1.originNumeralSystem = masterNumeralSystem.Take(number1.originBase).ToList();
+                    number1.originNumeralSystem = Number.MasterNumeralSystem.Take(number1.originBase).ToList();
                     number1.originNumeralSystemName = num1DropDownList.SelectedItem.Text;
 
                     number2.originBase = Convert.ToInt16(num2DropDownList.SelectedValue);
-                    number2.originNumeralSystem = masterNumeralSystem.Take(number2.originBase).ToList();
+                    number2.originNumeralSystem = Number.MasterNumeralSystem.Take(number2.originBase).ToList();
                     number2.originNumeralSystemName = num2DropDownList.SelectedItem.Text;
 
                     targetNumber.originBase = 10;
-                    targetNumber.originNumeralSystem = masterNumeralSystem.Take(10).ToList();
+                    targetNumber.originNumeralSystem = Number.MasterNumeralSystem.Take(10).ToList();
                     targetNumber.targetBase = Convert.ToInt16(targetDropDownList.SelectedValue);
-                    targetNumber.targetNumeralSystem = masterNumeralSystem.Take(targetNumber.targetBase).ToList();
+                    targetNumber.targetNumeralSystem = Number.MasterNumeralSystem.Take(targetNumber.targetBase).ToList();
 
                     // prepare user inputs for use
                     number1.input = num1TextBox.Text;
@@ -116,8 +116,8 @@ namespace BaseXToBaseY
                         && Validator.ValidateInput(number2))
                     {
                         // convert input to decimal
-                        number1.inputAsDecimal = Converter.ConvertInputToDecimal(number1, masterNumeralSystem);
-                        number2.inputAsDecimal = Converter.ConvertInputToDecimal(number2, masterNumeralSystem);
+                        number1.inputAsDecimal = Converter.ConvertInputToDecimal(number1, Number.MasterNumeralSystem);
+                        number2.inputAsDecimal = Converter.ConvertInputToDecimal(number2, Number.MasterNumeralSystem);
 
                         // prepare inputAsDecimal for use, preventing scientific notation
                         number1.inputAsDecimalString = number1.inputAsDecimal.ToString(Formatter.Notation);

@@ -11,7 +11,7 @@
         <div>
             <asp:Button ID="converterButton" PostBackUrl="~/Default.aspx" runat="server" Text="Converter" />
             <asp:Button Enabled="false" ID="calculatorButton" PostBackUrl="~/Calculator.aspx" runat="server" Text="Calculator" /><br /><br />
-            <p>Select Num1 numeral system:
+            <p>Select first number numeral system:
                 <asp:DropDownList ID="num1DropDownList" runat="server">
                 <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
                 <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
@@ -116,7 +116,7 @@
                 <asp:ListItem Value="101" Text="Base 101 (Uncentesimal)"></asp:ListItem>
             </asp:DropDownList>  
             </p>
-            <p>Select Num2 numeral system:
+            <p>Select second number numeral system:
                 <asp:DropDownList ID="num2DropDownList" runat="server">
                 <asp:ListItem Value="1" Text="Base 1 (Unary)"></asp:ListItem>
                 <asp:ListItem Selected="True" Value="2" Text="Base 2 (Binary)"></asp:ListItem>
@@ -327,7 +327,7 @@
             </asp:DropDownList>
             </p>
             <br />
-            Num1:
+            Number 1:
             <asp:TextBox ID="num1TextBox" runat="server"></asp:TextBox>
 &nbsp;
             <br />
@@ -336,7 +336,7 @@
 &nbsp;<asp:RadioButton ID="multiplicationRadioButton" runat="server" GroupName="mathGroup" Text="*" />
 &nbsp;<asp:RadioButton ID="divisionRadioButton" runat="server" GroupName="mathGroup" Text="/" />
 &nbsp;&nbsp;<br />
-            Num2:&nbsp;
+            Number 2:
             <asp:TextBox ID="num2TextBox" runat="server" Width="127px"></asp:TextBox>
             <br />
             <br />

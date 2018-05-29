@@ -116,8 +116,8 @@ namespace BaseXToBaseY
                         && Validator.ValidateInput(number2))
                     {
                         // convert input to decimal
-                        number1.inputAsDecimal = Converter.ConvertInputToDecimal(number1, Number.MasterNumeralSystem);
-                        number2.inputAsDecimal = Converter.ConvertInputToDecimal(number2, Number.MasterNumeralSystem);
+                        number1.inputAsDecimal = Converter.ConvertInputToDecimal(number1);
+                        number2.inputAsDecimal = Converter.ConvertInputToDecimal(number2);
 
                         // prepare inputAsDecimal for use, preventing scientific notation
                         number1.inputAsDecimalString = number1.inputAsDecimal.ToString(Formatter.Notation);

@@ -8,14 +8,14 @@ namespace BaseConverter.Domain
 {
     public class Converter
     {
-        public static double ConvertInputToDecimal(Number number, List<char> masterNumeralSystem)
+        public static double ConvertInputToDecimal(Number number)
         {
             double inputAsDecimal;
             // if input contains no fractional part
             if (!number.inputArray.Contains('.'))
             {
                 // assign decimal value of integer to result
-                inputAsDecimal = CalculateDecimalValueOfInteger(number.inputArray, number.originBase, masterNumeralSystem);
+                inputAsDecimal = CalculateDecimalValueOfInteger(number.inputArray, number.originBase);
             }
             // if input contains a fractional part
             else
@@ -26,10 +26,10 @@ namespace BaseConverter.Domain
                 fractionArray = fractionArray.Skip(1).ToArray();
 
                 // assign decimal value of integer part to result
-                inputAsDecimal = CalculateDecimalValueOfInteger(integerArray, number.originBase, masterNumeralSystem);
+                inputAsDecimal = CalculateDecimalValueOfInteger(integerArray, number.originBase);
 
                 // assign decimal value of integer part + fractional part to result
-                double fraction = CalculateDecimalValueOfFraction(fractionArray, number.originBase, masterNumeralSystem);
+                double fraction = CalculateDecimalValueOfFraction(fractionArray, number.originBase);
                 inputAsDecimal += fraction;
             }
             // return decimal value of input
@@ -37,7 +37,7 @@ namespace BaseConverter.Domain
         }
 
         // calculate the decimal value of an integer
-        private static double CalculateDecimalValueOfInteger(char[] inputArray, int originBase, List<char> masterNumeralSystem)
+        private static double CalculateDecimalValueOfInteger(char[] inputArray, int originBase)
         {
             // initialize decimal value and counter variables
             double decimalValue = 0;
@@ -46,7 +46,7 @@ namespace BaseConverter.Domain
             for (int i = inputArray.Length - 1; i >= 0; i--)
             {
                 var digit = inputArray[i];
-                double digitValue = CalculateDigitValue(digit, masterNumeralSystem);
+                double digitValue = CalculateDigitValue(digit);
                 decimalValue += (digitValue * CalculatePlaceValue(originBase, placeCounter));
                 placeCounter++;
             }
@@ -54,7 +54,7 @@ namespace BaseConverter.Domain
         }
 
         // calculate the decimal value of a fraction
-        private static double CalculateDecimalValueOfFraction(char[] inputArray, int originBase, List<char> masterNumeralSystem)
+        private static double CalculateDecimalValueOfFraction(char[] inputArray, int originBase)
         {
             // initialize decimal value and counter variables
             double decimalValue = 0;
@@ -64,7 +64,7 @@ namespace BaseConverter.Domain
             {
                 var digit = inputArray[i];
                 // calculate digit value and convert it to a double in order to multiply it by place value
-                double digitValue = CalculateDigitValue(digit, masterNumeralSystem);
+                double digitValue = CalculateDigitValue(digit);
                 // increase decimal value by the value of the digit times the value of the place
                 decimalValue += (digitValue * CalculatePlaceValue(originBase, placeCounter));
                 placeCounter++;
@@ -73,7 +73,7 @@ namespace BaseConverter.Domain
         }
 
         // calculate the decimal value of a digit
-        private static double CalculateDigitValue(char digit, List<char> masterNumeralSystem)
+        private static double CalculateDigitValue(char digit)
         {
             // initialize digit value
             int digitValue;
@@ -86,10 +86,10 @@ namespace BaseConverter.Domain
             {
                 digitValue = 1;
             }
-            // retrieve the decimal value of the digit from its index in the masterNumeralSystem list
+            // retrieve the decimal value of the digit from its index in the MasterNumeralSystem
             else
             {
-                digitValue = masterNumeralSystem.IndexOf(digit);
+                digitValue = Number.MasterNumeralSystem.IndexOf(digit);
             }
             return digitValue;
         }
@@ -118,7 +118,7 @@ namespace BaseConverter.Domain
             {
                 // convert inputAsDecimal to int, calculate its new value in targetNumeralSystem, assign that value to targetResult
                 decimalInteger = Convert.ToInt64(number.inputAsDecimal);
-                targetResult = CalculateBaseXIntegerValue(number.targetBase, decimalInteger, number.targetNumeralSystem);
+                targetResult = CalculateBaseXIntegerValue(number.targetBase, decimalInteger);
             }
             // if input contains a fractional part
             else
@@ -140,10 +140,10 @@ namespace BaseConverter.Domain
                 double decimalFraction = Convert.ToDouble(fractionString);
 
                 //  calculate decimalInteger value in the targetNumeralSystem, assign that value to integerResult
-                string integerResult = CalculateBaseXIntegerValue(number.targetBase, decimalInteger, number.targetNumeralSystem);
+                string integerResult = CalculateBaseXIntegerValue(number.targetBase, decimalInteger);
 
                 // calculate fractionInput value in the targetNumeralSystem, assign that value to fractionResult
-                string fractionResult = CalculateBaseXFractionValue(number.targetBase, decimalFraction, number.targetNumeralSystem);
+                string fractionResult = CalculateBaseXFractionValue(number.targetBase, decimalFraction);
 
                 // assign integerResult.fractionResult to targetResult
                 targetResult = integerResult + '.' + fractionResult;
@@ -151,7 +151,7 @@ namespace BaseConverter.Domain
             return targetResult;
         }
 
-        private static string CalculateBaseXIntegerValue(int targetBase, long decimalInteger, List<char> targetNumeralSystem)
+        private static string CalculateBaseXIntegerValue(int targetBase, long decimalInteger)
         {
             string integerResult = "";
             // edge case: if targetBase is unary
@@ -189,7 +189,7 @@ namespace BaseConverter.Domain
                         long dividend = decimalInteger / Convert.ToInt64(placeValue);
 
                         // determine digit equal to dividend in targetNumeralSystem
-                        char digit = DetermineDigit(dividend, targetNumeralSystem);
+                        char digit = DetermineDigit(dividend);
 
                         // append digit to integerResult
                         integerResult += digit.ToString();
@@ -209,7 +209,7 @@ namespace BaseConverter.Domain
             return integerResult;
         }
 
-        private static string CalculateBaseXFractionValue(int targetBase, double fractionInput, List<char> targetNumeralSystem)
+        private static string CalculateBaseXFractionValue(int targetBase, double fractionInput)
         {
             string fractionResult = "";
 
@@ -229,7 +229,7 @@ namespace BaseConverter.Domain
                 long appendage = Convert.ToInt64(Math.Floor(appendageCarry));
 
                 // determine digit equal to appendage in targetNumeralSystem
-                char digit = DetermineDigit(appendage, targetNumeralSystem);
+                char digit = DetermineDigit(appendage);
 
                 // append digit to fractionResult
                 fractionResult += digit;
@@ -244,7 +244,7 @@ namespace BaseConverter.Domain
         }
 
         // calculate the digit character of a given decimal value
-        private static char DetermineDigit(long dividend, List<char> targetNumeralSystem)
+        private static char DetermineDigit(long dividend)
         {
             char digitCharacter;
             if (dividend == 1)
@@ -257,7 +257,7 @@ namespace BaseConverter.Domain
             }
             else
             {
-                digitCharacter = targetNumeralSystem.ElementAt(Convert.ToInt32(dividend));
+                digitCharacter = Number.MasterNumeralSystem.ElementAt(Convert.ToInt32(dividend));
             }
             return digitCharacter;
         }

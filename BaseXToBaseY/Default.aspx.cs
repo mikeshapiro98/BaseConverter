@@ -77,7 +77,7 @@ namespace BaseXToBaseY
                         else
                         {
                             // convert input to decimal
-                            number.inputAsDecimal = Converter.ConvertInputToDecimal(number, Number.MasterNumeralSystem);
+                            number.inputAsDecimal = Converter.ConvertInputToDecimal(number);
 
                             // prepare inputAsDecimal for use, preventing scientific notation
                             number.inputAsDecimalString = number.inputAsDecimal.ToString(Formatter.Notation);
